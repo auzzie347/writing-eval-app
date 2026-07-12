@@ -159,16 +159,31 @@ def format_word_dict(word_dict):
 # 🌟 AI 평가문 생성 로직 (정확한 모델 자동 탐색 적용)
 # ==========================================
 def get_exact_model_name():
-    """API가 요구하는 정확한 모델 경로명(path)을 직접 조회하여 가져옵니다."""
+    """API가 요구하는 정확한 모델 경로명 중, 접근 차단된 버전을 피해 안전한 모델을 찾습니다."""
     genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
     
-    # 1. 지원하는 전체 모델 리스트를 순회합니다.
+    available_models = []
+    
+    # 1. 텍스트 생성이 가능한 모델을 모두 불러옵니다.
     for m in genai.list_models():
-        # 2. 텍스트 생성(generateContent)을 지원하고 'flash'가 포함된 가장 최신 모델의 정확한 이름을 추출합니다.
-        if 'generateContent' in m.supported_generation_methods and 'flash' in m.name:
-            return m.name # 예: 'models/gemini-1.5-flash-001' 등 API가 원하는 정확한 이름 반환
+        if 'generateContent' in m.supported_generation_methods:
+            available_models.append(m.name)
             
-    # 만약 찾지 못했다면 최후의 기본 문자열을 반환합니다.
+    # 2. 권한 에러가 나는 '2.5' 버전을 명시적으로 제외하고 flash 모델을 찾습니다.
+    for name in available_models:
+        if 'flash' in name and '2.5' not in name:
+            return name
+            
+    # 3. 만약 1.5 flash 계열도 없다면 pro 모델을 찾습니다.
+    for name in available_models:
+        if 'pro' in name:
+            return name
+            
+    # 4. 그래도 없다면, 구글이 선생님의 계정에 허락한 목록 중 가장 첫 번째 모델을 강제로 사용합니다.
+    if available_models:
+        return available_models[0]
+        
+    # 만일의 사태를 대비한 기본값
     return 'models/gemini-1.5-flash'
 
 def generate_ai_multi_evaluation(results_list):
