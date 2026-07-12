@@ -184,7 +184,7 @@ def get_exact_model_name():
         return available_models[0]
         
     # 만일의 사태를 대비한 기본값
-    return 'models/gemini-1.5-flash'
+    return 'models/gemini-2.5-flash-lite'
 
 def generate_ai_multi_evaluation(results_list):
     if not API_KEY_EXISTS:
