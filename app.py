@@ -7,19 +7,18 @@ from google import genai  # 최신 SDK 사용
 # ==========================================
 # 🌟 모델 및 API 설정
 # ==========================================
-MODEL_NAME = "models/gemini-2.5-flash"  # curl로 확인한 정확한 모델명
-
 client = None
 if "GEMINI_API_KEY" in st.secrets:
     client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 
-# AI 호출 함수 (이 부분이 중요합니다)
+MODEL_NAME = "models/gemini-2.5-flash"
+
 def ask_gemini(prompt):
     if not client: return "⚠️ API 키가 설정되지 않았습니다."
     try:
-        # 모델명은 선생님 계정에서 확인된 'models/gemini-2.5-flash'를 사용합니다
+        # 최신 SDK의 호출 방식입니다.
         response = client.models.generate_content(
-            model="models/gemini-2.5-flash", 
+            model=MODEL_NAME, 
             contents=prompt
         )
         return response.text
