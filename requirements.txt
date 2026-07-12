@@ -2,3 +2,4 @@ streamlit
 pandas
 kiwipiepy
 openpyxl
+google-generativeai
