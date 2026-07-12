@@ -178,7 +178,7 @@ def generate_ai_multi_evaluation(results_list):
     초등학생 아이들의 성장을 가장 가까이서 지켜보는 따뜻한 선생님의 어조로, 위 데이터의 양적 변화와 어휘력의 발전을 토대로 학생의 성장을 칭찬하고 앞으로의 글쓰기를 격려하는 종합 평가문(300자 내외)을 부드럽고 다정한 말투로 작성해 주세요. (기계적인 수치 나열보다는 의미를 짚어주세요.)
     """
     try:
-        client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
+        genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
         response = client.models.generate_content(
             model = genai.GenerativeModel('gemini-1.5-flash'),
             contents=prompt,
@@ -201,10 +201,10 @@ def generate_ai_individual_feedback(res):
     초등학생을 가르치는 다정한 선생님의 관점에서, 사용된 어휘를 바탕으로 아이가 어떤 재미있는 생각을 글로 표현했는지 칭찬하고 북돋아주는 짧은 피드백(150자 내외)을 작성해 주세요.
     """
     try:
-        client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
+        genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
         response = client.models.generate_content(
            model = genai.GenerativeModel('gemini-1.5-flash'),
-            contents=prompt,
+           contents=prompt,
         )
         return response.text
     except Exception as e:
