@@ -180,7 +180,7 @@ def generate_ai_multi_evaluation(results_list):
             model=MODEL_NAME, 
             contents=prompt
         )
-        return response.text
+            return response.text
     except Exception as e:
         return f"⚠️ AI 생성 중 오류가 발생했습니다: {e}"
         
