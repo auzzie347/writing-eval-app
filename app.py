@@ -156,7 +156,7 @@ def format_word_dict(word_dict):
     return ", ".join([f"**{word}**({count})" for word, count in sorted_words])
 
 # ==========================================
-# 🌟 AI 평가문 생성 로직 (google-genai SDK 방식)
+# 🌟 AI 평가문 생성 로직 (google-generativeai SDK 방식 수정 완료)
 # ==========================================
 def generate_ai_multi_evaluation(results_list):
     if not API_KEY_EXISTS:
@@ -179,11 +179,8 @@ def generate_ai_multi_evaluation(results_list):
     """
     try:
         genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-        response = client.models.generate_content(
-            model = genai.GenerativeModel('gemini-1.5-flash'),
-            contents=prompt,
-        )
-        
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        response = model.generate_content(prompt)
         return response.text
     except Exception as e:
         return f"⚠️ AI 생성 중 오류가 발생했습니다: {e}"
@@ -202,10 +199,8 @@ def generate_ai_individual_feedback(res):
     """
     try:
         genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-        response = client.models.generate_content(
-           model = genai.GenerativeModel('gemini-1.5-flash'),
-           contents=prompt,
-        )
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        response = model.generate_content(prompt)
         return response.text
     except Exception as e:
         return f"오류 발생: {e}"
