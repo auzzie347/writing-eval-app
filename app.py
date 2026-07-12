@@ -3,7 +3,7 @@ import pandas as pd
 from kiwipiepy import Kiwi
 import os
 
-import google.generativeai as genai
+import google as genai
 
 # ==========================================
 # 🌟 API 키 설정
