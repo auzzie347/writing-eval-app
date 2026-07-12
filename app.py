@@ -179,7 +179,7 @@ def generate_ai_multi_evaluation(results_list):
     try:
         client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
         response = client.models.generate_content(
-            model='gemini-2.5-flash',  # 💡 1.5 버전을 2.5-flash로 변경합니다!
+            model = genai.GenerativeModel('gemini-1.5-flash')
             contents=prompt,
         )
         
@@ -202,7 +202,7 @@ def generate_ai_individual_feedback(res):
     try:
         client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
         response = client.models.generate_content(
-            model='gemini-2.5-flash',  # 💡 1.5 버전을 2.5-flash로 변경합니다!
+           model = genai.GenerativeModel('gemini-1.5-flash')
             contents=prompt,
         )
         return response.text
