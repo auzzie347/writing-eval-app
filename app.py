@@ -13,6 +13,18 @@ client = None
 if "GEMINI_API_KEY" in st.secrets:
     client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 
+# AI 호출 함수 (이 부분이 중요합니다)
+def ask_gemini(prompt):
+    if not client: return "⚠️ API 키가 설정되지 않았습니다."
+    try:
+        # 모델명은 선생님 계정에서 확인된 'models/gemini-2.5-flash'를 사용합니다
+        response = client.models.generate_content(
+            model="models/gemini-2.5-flash", 
+            contents=prompt
+        )
+        return response.text
+    except Exception as e:
+        return f"⚠️ AI 생성 오류: {e}"
 # ==========================================
 # 🌟 나머지 디자인 및 데이터 로드 (이전과 동일)
 # ==========================================
