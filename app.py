@@ -45,42 +45,27 @@ st.markdown("""
         transform: translateY(-3px) !important;
     }
     
-/* 1. 모든 버튼 기본 스타일 (후버 및 애니메이션 완전 제거) */
+/* 1. 모든 버튼 기본 스타일 */
     .stButton > button {
         border-radius: 8px !important;
         font-weight: 600 !important;
         padding: 10px 24px !important;
-        border: 1px solid #e0e0e0 !important;
-        background-color: #ffffff !important;
-        color: #333333 !important;
-        transition: none !important;
+        border: none !important;
+        transition: all 0.3s ease !important; /* 부드러운 전환 효과 */
     }
 
-    /* 2. 붉은색 강조 버튼 */
-    div.stButton > button[kind="primary"] {
+    /* 2. '분석'이라는 글자가 포함된 버튼의 평상시 상태 (진보라색) */
+    div.stButton > button:has(span:contains("분석")) {
+        background-color: #7E57C2 !important; 
+        color: white !important;
+    }
+
+    /* 3. '분석' 버튼에 마우스를 올렸을 때 (빨간색) */
+    div.stButton > button:has(span:contains("분석")):hover {
         background-color: #FF4B4B !important;
         color: white !important;
-        border: none !important;
-    }
-
-    /* 3. 진한 보라색 분석 버튼 (이름에 '분석' 포함) */
-    div.stButton > button:has(span:contains("분석")) {
-        background-color: #7E57C2 !important; /* 훨씬 진하고 명확한 보라색 */
-        color: white !important;
-        border: none !important;
-    }
-
-    /* 4. 마우스를 올려도 변화 없도록 강력 고정 */
-    div.stButton > button:hover {
-        transform: none !important;
-        box-shadow: none !important;
-        background-color: #ffffff !important; /* 일반 버튼 후버 시 흰색 유지 */
-        border: 1px solid #e0e0e0 !important;
-    }
-    
-    /* 분석 버튼 호버 시에도 보라색 유지 */
-    div.stButton > button:has(span:contains("분석")):hover {
-        background-color: #7E57C2 !important; 
+        transform: translateY(-2px) !important; /* 살짝 떠오르는 효과 */
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important;
     }
 </style>
 """, unsafe_allow_html=True)
