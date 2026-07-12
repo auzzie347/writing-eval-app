@@ -5,15 +5,13 @@ import os
 
 import google as genai
 
-# ==========================================
-# 🌟 API 키 설정
-# ==========================================
-API_KEY_EXISTS = False
-try:
-    if "GEMINI_API_KEY" in st.secrets:
-        API_KEY_EXISTS = True
-except Exception:
-    pass
+# 모델 이름 고정
+MODEL_NAME = "models/gemini-2.5-flash"
+
+# 최신 SDK 클라이언트 초기화
+client = None
+if "GEMINI_API_KEY" in st.secrets:
+    client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 
 # ==========================================
 # 🌟 기본 설정 및 CSS 디자인
