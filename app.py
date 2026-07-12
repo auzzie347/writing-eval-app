@@ -288,7 +288,7 @@ for i, tab in enumerate(tabs):
         )
         input_texts.append(text_val)
         
-        if st.button(f"✨ {i+1}번째 글쓰기 분석 및 평가하기", key=f"btn_eval_{i}"):
+        if st.button(f"✨ {i+1}번째 글쓰기 분석 및 평가하기", type="primary", key=f"btn_eval_{i}"):
             if text_val.strip():
                 with st.spinner(f"{i+1}번째 글을 정밀 분석 중입니다..."):
                     # 💡 임시 보관이 아닌 사물함(session_state)에 저장합니다.
