@@ -2,10 +2,10 @@ import streamlit as st
 import pandas as pd
 from kiwipiepy import Kiwi
 import os
-from google import genai # 💡 새로운 최신 구글 라이브러리로 변경!
+from google import genai # 💡 공식 라이브러리 사용
 
 # ==========================================
-# 🌟 API 키 설정 (스트림릿 Secrets 활용)
+# 🌟 API 키 설정
 # ==========================================
 API_KEY_EXISTS = False
 try:
@@ -21,23 +21,17 @@ st.set_page_config(page_title="학생 글쓰기 종합 자동 평가 시스템",
 
 st.markdown("""
 <style>
-    /* 0. 폰트 적용 (모던하고 깔끔한 Noto Sans) */
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
     html, body, [class*="css"] {
         font-family: 'Noto Sans KR', sans-serif !important;
     }
-
-    /* 1. 상단 메뉴 및 헤더 숨기기 */
     #MainMenu {visibility: hidden !important;}
     footer {visibility: hidden !important;}
     header {visibility: hidden !important;}
-    
     .block-container {
         padding-top: 2rem !important;
         padding-bottom: 2rem !important;
     }
-    
-    /* 2. 글 입력칸(Text Area) 디자인 고급화 */
     .stTextArea textarea {
         border-radius: 12px !important;
         border: 2px solid #eef0f6 !important;
@@ -50,8 +44,6 @@ st.markdown("""
         border-color: #1A73E8 !important;
         box-shadow: 0 0 0 2px rgba(26,115,232,0.2) !important;
     }
-    
-    /* 3. 분석 결과 카드(Metric) 입체화 */
     div[data-testid="metric-container"] {
         background-color: #ffffff !important;
         border: 1px solid #eef0f6 !important;
@@ -64,16 +56,12 @@ st.markdown("""
         box-shadow: 0px 8px 15px rgba(0,0,0,0.08) !important;
         transform: translateY(-3px) !important;
     }
-    
-    /* 4. 버튼 디자인 */
     .stButton > button {
         border-radius: 8px !important;
         font-weight: 600 !important;
         padding: 10px 24px !important;
         transition: all 0.3s ease !important;
     }
-
-    /* 시계열 버튼 (진보라 -> 빨강 호버) */
     button[kind="secondary"]:has(span:contains("시계열")) {
         background-color: #7E57C2 !important;
         color: white !important;
@@ -83,8 +71,6 @@ st.markdown("""
         background-color: #FF4B4B !important;
         color: white !important;
     }
-
-    /* 분석 버튼 (흰색 바탕) */
     button[kind="secondary"]:not(:has(span:contains("시계열"))) {
         background-color: #ffffff !important;
         color: #333333 !important;
@@ -169,11 +155,11 @@ def format_word_dict(word_dict):
     return ", ".join([f"**{word}**({count})" for word, count in sorted_words])
 
 # ==========================================
-# 🌟 AI 평가문 생성 로직 (새로운 GenAI SDK 적용)
+# 🌟 AI 평가문 생성 로직 (google-genai SDK 방식)
 # ==========================================
 def generate_ai_multi_evaluation(results_list):
     if not API_KEY_EXISTS:
-        return "⚠️ API 키가 설정되지 않아 AI 종합 총평을 생성할 수 없습니다. (Settings > Secrets에서 GEMINI_API_KEY를 설정해주세요.)"
+        return "⚠️ API 키가 설정되지 않아 AI 종합 총평을 생성할 수 없습니다."
     
     num_texts = len(results_list)
     first = results_list[0]
@@ -191,10 +177,9 @@ def generate_ai_multi_evaluation(results_list):
     초등학생 아이들의 성장을 가장 가까이서 지켜보는 따뜻한 선생님의 어조로, 위 데이터의 양적 변화와 어휘력의 발전을 토대로 학생의 성장을 칭찬하고 앞으로의 글쓰기를 격려하는 종합 평가문(300자 내외)을 부드럽고 다정한 말투로 작성해 주세요. (기계적인 수치 나열보다는 의미를 짚어주세요.)
     """
     try:
-        # 새로운 라이브러리 문법으로 변경됨
         client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
         response = client.models.generate_content(
-            model='gemini-2.5-flash',
+            model='gemini-1.5-flash',
             contents=prompt,
         )
         return response.text
@@ -214,10 +199,9 @@ def generate_ai_individual_feedback(res):
     초등학생을 가르치는 다정한 선생님의 관점에서, 사용된 어휘를 바탕으로 아이가 어떤 재미있는 생각을 글로 표현했는지 칭찬하고 북돋아주는 짧은 피드백(150자 내외)을 작성해 주세요.
     """
     try:
-        # 새로운 라이브러리 문법으로 변경됨
         client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
         response = client.models.generate_content(
-            model='gemini-2.5-flash',
+            model='gemini-1.5-flash',
             contents=prompt,
         )
         return response.text
@@ -267,7 +251,6 @@ def display_individual_results(res, title, container_type="info", idx=0):
             with st.expander(f"{grade_name} ➔ 총 {total_grade_count}개 ({len(words_in_grade)}종)"):
                 st.write(format_word_dict(words_in_grade))
                 
-    # 개별 AI 평가문 버튼
     st.write("---")
     if st.button(f"🤖 {title} 기반 AI 맞춤형 코멘트 생성하기", key=f"ai_btn_{idx}"):
         with st.spinner("선생님의 마음으로 따뜻한 코멘트를 작성하고 있습니다..."):
@@ -281,7 +264,7 @@ st.title("📝 학생 글쓰기 종합 자동 평가 시스템")
 st.write("평가할 글의 개수를 설정하고, 단편 진단부터 다회차 성장 추적까지 한 번에 관리하세요.")
 
 if not API_KEY_EXISTS:
-    st.warning("⚠️ **현재 AI API 키가 연결되어 있지 않습니다.** 데이터 수치 분석은 정상 작동하지만, AI 평가문 생성 기능을 위해 추후 `GEMINI_API_KEY`를 등록해주세요.")
+    st.warning("⚠️ **현재 AI API 키가 연결되어 있지 않습니다.**")
 
 st.divider()
 
@@ -329,7 +312,6 @@ if compare_btn:
         with st.spinner("글을 비교 분석하고 AI 성장 리포트를 작성 중입니다..."):
             results_list = [analyze_text(text) for text in input_texts]
             st.session_state["compare_results"] = results_list
-            # 시계열 평가문은 누를 때 한 번만 생성하여 저장해둡니다.
             st.session_state["ai_multi_eval"] = generate_ai_multi_evaluation(results_list)
     else:
         st.error("입력되지 않은 글이 있습니다. 모든 탭에 글을 채워주세요.")
