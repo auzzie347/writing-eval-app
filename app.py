@@ -45,27 +45,36 @@ st.markdown("""
         transform: translateY(-3px) !important;
     }
     
-/* 1. 모든 버튼 기본 스타일 */
+    /* 1. 기본 스타일 */
     .stButton > button {
         border-radius: 8px !important;
         font-weight: 600 !important;
         padding: 10px 24px !important;
-        border: none !important;
-        transition: all 0.3s ease !important; /* 부드러운 전환 효과 */
+        transition: all 0.3s ease !important;
     }
 
-    /* 2. '분석'이라는 글자가 포함된 버튼의 평상시 상태 (진보라색) */
-    div.stButton > button:has(span:contains("분석")) {
-        background-color: #7E57C2 !important; 
+    /* 2. 시계열 버튼 (진보라 -> 빨강 호버) */
+    /* 버튼에 고유한 키값으로 식별 */
+    button[kind="secondary"]:has(span:contains("시계열")) {
+        background-color: #7E57C2 !important;
         color: white !important;
+        border: none !important;
     }
-
-    /* 3. '분석' 버튼에 마우스를 올렸을 때 (빨간색) */
-    div.stButton > button:has(span:contains("분석")):hover {
+    button[kind="secondary"]:has(span:contains("시계열")):hover {
         background-color: #FF4B4B !important;
         color: white !important;
-        transform: translateY(-2px) !important; /* 살짝 떠오르는 효과 */
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2) !important;
+    }
+
+    /* 3. 분석 버튼 (흰색 바탕, 기본 스타일) */
+    /* '시계열'이 포함되지 않은 버튼만 선택 */
+    button[kind="secondary"]:not(:has(span:contains("시계열"))) {
+        background-color: #ffffff !important;
+        color: #333333 !important;
+        border: 1px solid #e0e0e0 !important;
+    }
+    button[kind="secondary"]:not(:has(span:contains("시계열"))):hover {
+        border: 1px solid #7E57C2 !important;
+        color: #7E57C2 !important;
     }
 </style>
 """, unsafe_allow_html=True)
