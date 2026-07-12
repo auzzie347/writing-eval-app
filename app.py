@@ -2,7 +2,8 @@ import streamlit as st
 import pandas as pd
 from kiwipiepy import Kiwi
 import os
-from google import genai # 💡 공식 라이브러리 사용
+
+import google.generativeai as genai
 
 # ==========================================
 # 🌟 API 키 설정
