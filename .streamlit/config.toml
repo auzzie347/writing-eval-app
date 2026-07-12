@@ -8,4 +8,4 @@ secondaryBackgroundColor = "#FFFFFF"
 # 글자색: 보라색과 잘 어우러지는 차분한 다크 그레이
 textColor = "#4A4A4A" 
 # 폰트: 깔끔한 스타일
-font = "sans serif"
+font = "monospace"
