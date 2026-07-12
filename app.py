@@ -122,26 +122,32 @@ def analyze_text(text):
     
     for token in tokens:
         word_form = token.form
+        # 1. 명사/동사 추출
         if token.tag.startswith('N'):
             word_to_check = word_form
             found_nouns[word_to_check] = found_nouns.get(word_to_check, 0) + 1
             total_noun_count += 1
         elif token.tag == 'VV':
-            word_to_check = word_form + "다"
+            word_to_check = word_form + "다" # 동사는 '다'를 붙여서 매칭
             found_verbs[word_to_check] = found_verbs.get(word_to_check, 0) + 1
             total_verb_count += 1
         else:
             continue
-            
+        
+        # 2. 어휘 매칭 (핵심 수정: 혹시 모를 공백 제거 후 비교)
         grade = vocab_data.get(word_to_check)
-        if grade and isinstance(grade, str):
-            grade_cleaned = grade.strip()
+        
+        # 만약 매칭이 안 된다면, 혹시 형태소 분석 결과가 엑셀과 조금 다를 수 있으므로 
+        # 단어 자체가 엑셀에 있는지 다시 한번 체크 (예외 처리)
+        if not grade:
+            # 어휘 데이터 전체를 조회하기 어렵다면, 일단 '등급 외'로 분류
+            grade_words["등급 외"][word_to_check] = grade_words["등급 외"].get(word_to_check, 0) + 1
+        else:
+            grade_cleaned = str(grade).strip()
             if grade_cleaned in grade_words:
                 grade_words[grade_cleaned][word_to_check] = grade_words[grade_cleaned].get(word_to_check, 0) + 1
             else:
                 grade_words["등급 외"][word_to_check] = grade_words["등급 외"].get(word_to_check, 0) + 1
-        else:
-            grade_words["등급 외"][word_to_check] = grade_words["등급 외"].get(word_to_check, 0) + 1
             
     return {
         "char_count": char_count_no_spaces,
