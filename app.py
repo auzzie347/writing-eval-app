@@ -5,7 +5,58 @@ import os
 
 # 🌟 화면을 넓게 쓰는 와이드 레이아웃 설정
 st.set_page_config(page_title="학생 글쓰기 종합 자동 평가 시스템", layout="wide")
+# 기존 코드의 st.set_page_config(...) 바로 아래에 이 코드를 추가하세요!
 
+st.markdown("""
+<style>
+    /* 1. 기본 Streamlit 메뉴 및 워터마크 숨기기, 상단 여백 줄이기 */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    .block-container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+    
+    /* 2. 통계 지표(Metric)를 고급스러운 카드로 만들기 */
+    div[data-testid="metric-container"] {
+        background-color: #ffffff;
+        border: 1px solid #e6e6e6;
+        padding: 5% 5% 5% 10%;
+        border-radius: 10px;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+    }
+    div[data-testid="metric-container"]:hover {
+        box-shadow: 4px 4px 15px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+    }
+    
+    /* 3. 기본 버튼을 입체적이고 세련되게 다듬기 */
+    .stButton>button {
+        border-radius: 8px;
+        font-weight: 600;
+        box-shadow: 0px 4px 6px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        border: 1px solid #e0e0e0;
+    }
+    .stButton>button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0px 6px 12px rgba(0,0,0,0.15);
+        border-color: #1A73E8;
+    }
+    
+    /* 4. 탭(Tabs) 디자인 깔끔하게 정리하기 */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 10px;
+    }
+    .stTabs [data-baseweb="tab"] {
+        border-radius: 4px 4px 0px 0px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+</style>
+""", unsafe_allow_html=True)
 @st.cache_resource
 def load_kiwi():
     return Kiwi()
