@@ -175,14 +175,15 @@ def generate_ai_multi_evaluation(results_list):
 
     초등학생 아이들의 성장을 가장 가까이서 지켜보는 따뜻한 선생님의 어조로, 위 데이터의 양적 변화와 어휘력의 발전을 토대로 학생의 성장을 칭찬하고 앞으로의 글쓰기를 격려하는 종합 평가문(300자 내외)을 부드럽고 다정한 말투로 작성해 주세요. (기계적인 수치 나열보다는 의미를 짚어주세요.)
     """
-    try:
-       response = client.models.generate_content(
+  try:
+        response = client.models.generate_content(
             model=MODEL_NAME, 
             contents=prompt
         )
-        return response.text
+        # 중요: 아래 줄이 앞선 코드(try/response)와 동일한 수준의 들여쓰기여야 합니다.
+        return response.text 
     except Exception as e:
-        return f"⚠️ AI 생성 중 오류가 발생했습니다: {e}"
+        return f"⚠️ AI 생성 오류: {e}"
         
 def generate_ai_individual_feedback(res):
     if not API_KEY_EXISTS:
@@ -196,15 +197,15 @@ def generate_ai_individual_feedback(res):
     
     초등학생을 가르치는 다정한 선생님의 관점에서, 사용된 어휘를 바탕으로 아이가 어떤 재미있는 생각을 글로 표현했는지 칭찬하고 북돋아주는 짧은 피드백(150자 내외)을 작성해 주세요.
     """
-    try:
+   try:
         response = client.models.generate_content(
             model=MODEL_NAME, 
             contents=prompt
         )
-        return response.text
+        # 중요: 아래 줄이 앞선 코드(try/response)와 동일한 수준의 들여쓰기여야 합니다.
+        return response.text 
     except Exception as e:
-        return f"⚠️ AI 생성 중 오류가 발생했습니다: {e}"
-
+        return f"⚠️ AI 생성 오류: {e}"
 # ==========================================
 # 🌟 개별 결과 출력 및 UI
 # ==========================================
