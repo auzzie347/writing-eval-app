@@ -180,7 +180,7 @@ def generate_ai_multi_evaluation(results_list):
     try:
         genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
         # 에러 방지를 위해 가장 안정적인 모델로 직접 고정합니다.
-        model = genai.GenerativeModel('models/gemini-1.5-flash')
+        model = genai.GenerativeModel('models/gemini-2.5-flash')
         
         response = model.generate_content(prompt)
         return response.text
@@ -202,7 +202,7 @@ def generate_ai_individual_feedback(res):
     try:
         genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
         # 에러 방지를 위해 가장 안정적인 모델로 직접 고정합니다.
-        model = genai.GenerativeModel('models/gemini-1.5-flash')
+        model = genai.GenerativeModel('models/gemini-2.5-flash')
         
         response = model.generate_content(prompt)
         return response.text
