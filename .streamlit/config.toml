@@ -1,0 +1,11 @@
+[theme]
+# 메인 포인트: 부드러운 라벤더 퍼플
+primaryColor = "#B39DDB" 
+# 전체 배경: 아주 연한 파스텔 라벤더 화이트
+backgroundColor = "#F9F7FC" 
+# 카드/패널 배경: 깨끗한 화이트
+secondaryBackgroundColor = "#FFFFFF" 
+# 글자색: 보라색과 잘 어우러지는 차분한 다크 그레이
+textColor = "#4A4A4A" 
+# 폰트: 깔끔한 스타일
+font = "San serif"
