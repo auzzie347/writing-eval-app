@@ -45,18 +45,19 @@ st.markdown("""
         transform: translateY(-3px) !important;
     }
     
-/* 4. 기본 버튼은 차분하게, 하지만 '시계열 분석' 버튼 같은 중요 버튼은 붉은색으로! */
-    .stButton>button {
+/* 4. 버튼 디자인: 기본은 깔끔하게, 특정 클래스를 가진 버튼은 붉은색으로! */
+    .stButton > button {
         border-radius: 8px;
         font-weight: 600;
         padding: 10px 24px;
         border: 1px solid #e0e0e0;
-        background-color: #ffffff; /* 기존보다 더 깔끔하게 */
-        transition: all 0.3s ease;
+        background-color: #ffffff;
+        color: #333333;
+        transition: none; /* 후버 효과 제거 */
     }
     
-    /* 여기서 '시계열'이라는 글자가 포함된 버튼을 찾아 강제로 빨간색을 입힙니다 */
-    div.stButton > button:contains("시계열") {
+    /* 붉은색 버튼 클래스 (red-button)를 입힌 버튼만 붉게 변경 */
+    div.stButton > button[kind="primary"] {
         background-color: #FF4B4B !important;
         color: white !important;
         border: none !important;
