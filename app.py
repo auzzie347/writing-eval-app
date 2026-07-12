@@ -7,23 +7,58 @@ import os
 st.set_page_config(page_title="학생 글쓰기 종합 자동 평가 시스템", layout="wide")
 st.markdown("""
 <style>
-    /* CSS의 각 속성 끝에 !important를 붙여 우선순위를 강제로 높입니다 */
+    /* 1. 상단 메뉴 및 헤더 숨기기 */
+    #MainMenu {visibility: hidden !important;}
+    footer {visibility: hidden !important;}
+    header {visibility: hidden !important;}
+    
+    .block-container {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+    
+    /* 2. 글 입력칸(Text Area) 디자인 고급화 */
     .stTextArea textarea {
         border-radius: 12px !important;
-        border: 2px solid #E1D5E7 !important; /* 테마와 어울리는 연한 보라색 테두리 */
+        border: 2px solid #eef0f6 !important;
+        box-shadow: inset 2px 2px 5px rgba(0,0,0,0.02) !important;
         padding: 15px !important;
+        font-size: 16px !important;
+        transition: border-color 0.3s ease !important;
+    }
+    .stTextArea textarea:focus {
+        border-color: #1A73E8 !important;
+        box-shadow: 0 0 0 2px rgba(26,115,232,0.2) !important;
     }
     
+    /* 3. 분석 결과 카드(Metric) 입체화 */
     div[data-testid="metric-container"] {
         background-color: #ffffff !important;
-        border: 1px solid #E1D5E7 !important;
+        border: 1px solid #eef0f6 !important;
+        padding: 15px 20px !important;
         border-radius: 12px !important;
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.04) !important;
+        transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+    }
+    div[data-testid="metric-container"]:hover {
+        box-shadow: 0px 8px 15px rgba(0,0,0,0.08) !important;
+        transform: translateY(-3px) !important;
     }
     
+    /* 4. 버튼 디자인 */
     .stButton>button {
         border-radius: 8px !important;
-        background-color: #B39DDB !important; /* 테마 메인 색상 적용 */
-        color: white !important;
+        font-weight: 600 !important;
+        padding: 10px 24px !important;
+        border: none !important;
+        background-color: #f8f9fa !important;
+        box-shadow: 0px 2px 5px rgba(0,0,0,0.05) !important;
+        transition: all 0.3s ease !important;
+    }
+    .stButton>button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0px 5px 10px rgba(0,0,0,0.1) !important;
+        color: #1A73E8 !important;
     }
 </style>
 """, unsafe_allow_html=True)
