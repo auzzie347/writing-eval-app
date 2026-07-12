@@ -156,8 +156,21 @@ def format_word_dict(word_dict):
     return ", ".join([f"**{word}**({count})" for word, count in sorted_words])
 
 # ==========================================
-# 🌟 AI 평가문 생성 로직 (google-generativeai SDK 방식 수정 완료)
+# 🌟 AI 평가문 생성 로직 (정확한 모델 자동 탐색 적용)
 # ==========================================
+def get_exact_model_name():
+    """API가 요구하는 정확한 모델 경로명(path)을 직접 조회하여 가져옵니다."""
+    genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+    
+    # 1. 지원하는 전체 모델 리스트를 순회합니다.
+    for m in genai.list_models():
+        # 2. 텍스트 생성(generateContent)을 지원하고 'flash'가 포함된 가장 최신 모델의 정확한 이름을 추출합니다.
+        if 'generateContent' in m.supported_generation_methods and 'flash' in m.name:
+            return m.name # 예: 'models/gemini-1.5-flash-001' 등 API가 원하는 정확한 이름 반환
+            
+    # 만약 찾지 못했다면 최후의 기본 문자열을 반환합니다.
+    return 'models/gemini-1.5-flash'
+
 def generate_ai_multi_evaluation(results_list):
     if not API_KEY_EXISTS:
         return "⚠️ API 키가 설정되지 않아 AI 종합 총평을 생성할 수 없습니다."
@@ -179,7 +192,10 @@ def generate_ai_multi_evaluation(results_list):
     """
     try:
         genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-        model = genai.GenerativeModel('gemini-pro')
+        # 직접 찾아낸 정확한 경로명을 삽입합니다.
+        exact_model_path = get_exact_model_name() 
+        model = genai.GenerativeModel(exact_model_path)
+        
         response = model.generate_content(prompt)
         return response.text
     except Exception as e:
@@ -199,7 +215,10 @@ def generate_ai_individual_feedback(res):
     """
     try:
         genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-        model = genai.GenerativeModel('gemini-pro')
+        # 직접 찾아낸 정확한 경로명을 삽입합니다.
+        exact_model_path = get_exact_model_name()
+        model = genai.GenerativeModel(exact_model_path)
+        
         response = model.generate_content(prompt)
         return response.text
     except Exception as e:
