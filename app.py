@@ -45,7 +45,7 @@ st.markdown("""
         transform: translateY(-3px) !important;
     }
     
-/* 1. 일반 버튼 스타일 (후버 효과 제거) */
+/* 1. 기본 버튼 디자인 (후버 및 변화 제거) */
     .stButton > button {
         border-radius: 8px;
         font-weight: 600;
@@ -53,28 +53,28 @@ st.markdown("""
         border: 1px solid #e0e0e0;
         background-color: #ffffff;
         color: #333333;
-        transition: none !important; /* 후버 효과 차단 */
+        transition: none !important;
     }
 
-    /* 2. 특정 '강조 버튼(primary)' 스타일 (붉은색) */
+    /* 2. 붉은색 강조 버튼 (type="primary" 속성 사용 시) */
     div.stButton > button[kind="primary"] {
         background-color: #FF4B4B !important;
         color: white !important;
         border: none !important;
     }
 
-    /* 3. 보라색 고정 버튼 (분석 버튼 전용) */
-    /* 버튼 텍스트에 "분석"이라는 글자가 포함되면 보라색 적용 */
+    /* 3. 보라색 분석 버튼 (이름에 "분석"이 포함된 모든 버튼) */
     div.stButton > button:has(span:contains("분석")) {
-        background-color: #B39DDB !important; /* 라벤더 보라 */
+        background-color: #B39DDB !important;
         color: white !important;
         border: none !important;
     }
 
-    /* 4. 후버 시 변화 없도록 강제 고정 */
+    /* 4. 마우스를 올려도(후버) 아무 일도 없게 고정 */
     div.stButton > button:hover {
         transform: none !important;
         box-shadow: none !important;
+        border: 1px solid #e0e0e0 !important;
     }
 </style>
 """, unsafe_allow_html=True)
