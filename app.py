@@ -156,36 +156,8 @@ def format_word_dict(word_dict):
     return ", ".join([f"**{word}**({count})" for word, count in sorted_words])
 
 # ==========================================
-# 🌟 AI 평가문 생성 로직 (정확한 모델 자동 탐색 적용)
+# 🌟 AI 평가문 생성 로직 (안정적인 1.5 flash 모델 고정)
 # ==========================================
-def get_exact_model_name():
-    """API가 요구하는 정확한 모델 경로명 중, 접근 차단된 버전을 피해 안전한 모델을 찾습니다."""
-    genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-    
-    available_models = []
-    
-    # 1. 텍스트 생성이 가능한 모델을 모두 불러옵니다.
-    for m in genai.list_models():
-        if 'generateContent' in m.supported_generation_methods:
-            available_models.append(m.name)
-            
-    # 2. 권한 에러가 나는 '2.5' 버전을 명시적으로 제외하고 flash 모델을 찾습니다.
-    for name in available_models:
-        if 'flash' in name and '2.5' not in name:
-            return name
-            
-    # 3. 만약 1.5 flash 계열도 없다면 pro 모델을 찾습니다.
-    for name in available_models:
-        if 'pro' in name:
-            return name
-            
-    # 4. 그래도 없다면, 구글이 선생님의 계정에 허락한 목록 중 가장 첫 번째 모델을 강제로 사용합니다.
-    if available_models:
-        return available_models[0]
-        
-    # 만일의 사태를 대비한 기본값
-    return 'models/gemini-2.5-flash'
-
 def generate_ai_multi_evaluation(results_list):
     if not API_KEY_EXISTS:
         return "⚠️ API 키가 설정되지 않아 AI 종합 총평을 생성할 수 없습니다."
@@ -207,9 +179,8 @@ def generate_ai_multi_evaluation(results_list):
     """
     try:
         genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-        # 직접 찾아낸 정확한 경로명을 삽입합니다.
-        exact_model_path = get_exact_model_name() 
-        model = genai.GenerativeModel(exact_model_path)
+        # 에러 방지를 위해 가장 안정적인 모델로 직접 고정합니다.
+        model = genai.GenerativeModel('models/gemini-1.5-flash')
         
         response = model.generate_content(prompt)
         return response.text
@@ -230,9 +201,8 @@ def generate_ai_individual_feedback(res):
     """
     try:
         genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-        # 직접 찾아낸 정확한 경로명을 삽입합니다.
-        exact_model_path = get_exact_model_name()
-        model = genai.GenerativeModel(exact_model_path)
+        # 에러 방지를 위해 가장 안정적인 모델로 직접 고정합니다.
+        model = genai.GenerativeModel('models/gemini-1.5-flash')
         
         response = model.generate_content(prompt)
         return response.text
@@ -269,17 +239,27 @@ def display_individual_results(res, title, container_type="info", idx=0):
     desc_col, dl_col = st.columns([3, 1])
     with desc_col:
         st.markdown("""
-        <p style="color: #5f6368; font-size: 14px; margin: 0;">
+        <p style="color: #5f6368; font-size: 14px; margin: 0; padding-bottom: 10px;">
             💡 <b>국어 기초 어휘 선정 및 어휘 등급화 목록이란?</b><br>
             국립국어원 표준 지침에 따라 1등급(가장 기초적)부터 5등급까지 체계화된 어휘 데이터베이스입니다.
         </p>
         """, unsafe_allow_html=True)
+    
+    # 📌 등급별 단어 개수를 한눈에 보여주는 시각적 요약(Metric) 추가
+    grade_metrics = st.columns(6)
+    grade_names = ["1등급", "2등급", "3등급", "4등급", "5등급", "등급 외"]
+    for i, grade_name in enumerate(grade_names):
+        count = sum(res['grade_words'][grade_name].values())
+        grade_metrics[i].metric(grade_name, f"{count}개")
         
-    for grade_name in ["1등급", "2등급", "3등급", "4등급", "5등급", "등급 외"]:
+    st.write("") # 여백
+    
+    # 📌 등급별 상세 단어 내용 표기 (Expander)
+    for grade_name in grade_names:
         words_in_grade = res['grade_words'][grade_name]
         total_grade_count = sum(words_in_grade.values())
         if total_grade_count > 0:
-            with st.expander(f"{grade_name} ➔ 총 {total_grade_count}개 ({len(words_in_grade)}종)"):
+            with st.expander(f"📖 {grade_name} 단어 상세 보기 ➔ 총 {total_grade_count}개 ({len(words_in_grade)}종)"):
                 st.write(format_word_dict(words_in_grade))
                 
     st.write("---")
