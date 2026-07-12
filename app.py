@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from kiwipiepy import Kiwi
 import os
-from google import genai # 💡 새로운 최신 구글 라이브러리로 변경!
+import requests # 💡 무거운 구글 라이브러리 대신 가벼운 웹 통신 사용
 
 # ==========================================
 # 🌟 API 키 설정 (스트림릿 Secrets 활용)
@@ -169,12 +169,29 @@ def format_word_dict(word_dict):
     return ", ".join([f"**{word}**({count})" for word, count in sorted_words])
 
 # ==========================================
-# 🌟 AI 평가문 생성 로직 (새로운 GenAI SDK 적용)
+# 🌟 AI 평가문 생성 로직 (가벼운 REST API 방식)
 # ==========================================
-def generate_ai_multi_evaluation(results_list):
+def call_gemini_api(prompt):
     if not API_KEY_EXISTS:
-        return "⚠️ API 키가 설정되지 않아 AI 종합 총평을 생성할 수 없습니다. (Settings > Secrets에서 GEMINI_API_KEY를 설정해주세요.)"
+        return "⚠️ API 키가 설정되지 않았습니다."
     
+    api_key = st.secrets["GEMINI_API_KEY"]
+    # 최신 모델인 2.5-flash로 다이렉트 호출
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
+    headers = {'Content-Type': 'application/json'}
+    data = {
+        "contents": [{"parts": [{"text": prompt}]}]
+    }
+    
+    try:
+        response = requests.post(url, headers=headers, json=data)
+        response.raise_for_status()
+        result = response.json()
+        return result['candidates'][0]['content']['parts'][0]['text']
+    except Exception as e:
+        return f"⚠️ AI 생성 중 오류가 발생했습니다: {e}"
+
+def generate_ai_multi_evaluation(results_list):
     num_texts = len(results_list)
     first = results_list[0]
     last = results_list[-1]
@@ -190,21 +207,9 @@ def generate_ai_multi_evaluation(results_list):
 
     초등학생 아이들의 성장을 가장 가까이서 지켜보는 따뜻한 선생님의 어조로, 위 데이터의 양적 변화와 어휘력의 발전을 토대로 학생의 성장을 칭찬하고 앞으로의 글쓰기를 격려하는 종합 평가문(300자 내외)을 부드럽고 다정한 말투로 작성해 주세요. (기계적인 수치 나열보다는 의미를 짚어주세요.)
     """
-    try:
-        # 새로운 라이브러리 문법으로 변경됨
-        client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
-        response = client.models.generate_content(
-            model='gemini-2.5-flash',
-            contents=prompt,
-        )
-        return response.text
-    except Exception as e:
-        return f"⚠️ AI 생성 중 오류가 발생했습니다: {e}"
+    return call_gemini_api(prompt)
 
 def generate_ai_individual_feedback(res):
-    if not API_KEY_EXISTS:
-        return "⚠️ API 키를 설정해주세요."
-    
     prompt = f"""
     학생이 방금 작성한 단편 글의 분석 데이터입니다.
     - 글자 수: {res['char_count']}자
@@ -213,16 +218,7 @@ def generate_ai_individual_feedback(res):
     
     초등학생을 가르치는 다정한 선생님의 관점에서, 사용된 어휘를 바탕으로 아이가 어떤 재미있는 생각을 글로 표현했는지 칭찬하고 북돋아주는 짧은 피드백(150자 내외)을 작성해 주세요.
     """
-    try:
-        # 새로운 라이브러리 문법으로 변경됨
-        client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
-        response = client.models.generate_content(
-            model='gemini-2.5-flash',
-            contents=prompt,
-        )
-        return response.text
-    except Exception as e:
-        return f"오류 발생: {e}"
+    return call_gemini_api(prompt)
 
 # ==========================================
 # 🌟 개별 결과 출력 및 UI
