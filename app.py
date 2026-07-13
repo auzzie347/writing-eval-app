@@ -255,7 +255,7 @@ def display_individual_results(res, title, container_type="info", idx=0):
     if st.button(f"🤖 {title} 기반 AI 맞춤형 코멘트 생성하기", key=f"ai_btn_{idx}"):
         with st.spinner("선생님의 마음으로 따뜻한 코멘트를 작성하고 있습니다..."):
             ai_feedback = generate_ai_individual_feedback(res)
-            st.success(f"**💌 AI 선생님의 코멘트:**\n\n{ai_feedback}")
+            st.success(f"**💌선생님 총평:**\n\n{ai_feedback}")
 
 # ==========================================
 # 🌟 메인 화면 구성
