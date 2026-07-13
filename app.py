@@ -138,6 +138,8 @@ if "screen" not in st.session_state:
     st.session_state["screen"] = "input"   # "input" | "report"
 if "prev_num_texts" not in st.session_state:
     st.session_state["prev_num_texts"] = 1
+if "student_name" not in st.session_state:
+    st.session_state["student_name"] = ""
 
 # ==========================================
 # 🌟 데이터 및 분석 엔진 로드
@@ -231,10 +233,11 @@ def grade_summary_text(res):
 # ==========================================
 MAX_TEXT_LEN = 2500
 
-def generate_ai_multi_evaluation(results_list):
+def generate_ai_multi_evaluation(results_list, student_name=""):
     if not API_KEY_EXISTS:
         return "⚠️ API 키가 설정되지 않아 AI 종합 총평을 생성할 수 없습니다."
     num_texts = len(results_list)
+    name_label = f"{student_name} 학생" if student_name.strip() else "학생"
     data_blocks = []
     for i, res in enumerate(results_list):
         excerpt = res["text"][:MAX_TEXT_LEN]
@@ -247,11 +250,13 @@ def generate_ai_multi_evaluation(results_list):
 \"\"\"{excerpt}\"\"\"
 """)
     prompt = f"""당신은 초등학생의 글쓰기 성장을 오랫동안 지도해 온 경험 많고 다정한 국어 선생님입니다.
-학생이 시간 순서대로 작성한 총 {num_texts}편의 글과 형태소 분석 데이터가 아래에 있습니다.
+평가 대상 학생 이름: {name_label}
+{name_label}이(가) 시간 순서대로 작성한 총 {num_texts}편의 글과 형태소 분석 데이터가 아래에 있습니다.
 
 {''.join(data_blocks)}
 
-위 자료를 모두 종합하여, 학생의 글쓰기 역량 향상에 대한 구체적인 종합 평가문을 1000자 내외로 작성해 주세요.
+위 자료를 모두 종합하여, {name_label}의 글쓰기 역량 향상에 대한 구체적인 종합 평가문을 1000자 내외로 작성해 주세요.
+평가문 전체에 걸쳐 '{name_label}'을(를) 자연스럽게 호명하면서 작성해 주세요.
 반드시 다음 네 가지 관점을 균형 있게 담아 주세요.
 
 1. [양적 성장] 글자 수, 명사·동사 사용량이 회차에 따라 어떻게 변화했는지, 그 변화가 갖는 의미
@@ -272,12 +277,15 @@ def generate_ai_multi_evaluation(results_list):
     except Exception as e:
         return f"⚠️ AI 생성 중 오류가 발생했습니다: {e}"
 
-def generate_ai_individual_feedback(res):
+def generate_ai_individual_feedback(res, student_name=""):
     if not API_KEY_EXISTS:
         return "⚠️ API 키를 설정해주세요."
+    name_label = f"{student_name} 학생" if student_name.strip() else "학생"
     excerpt = res["text"][:MAX_TEXT_LEN]
     prompt = f"""당신은 초등학생의 글쓰기를 지도하는 경험 많고 다정한 국어 선생님입니다.
-학생이 방금 작성한 글과 형태소 분석 데이터가 아래에 있습니다.
+평가 대상 학생 이름: {name_label}
+{name_label}이(가) 방금 작성한 글과 형태소 분석 데이터가 아래에 있습니다.
+평가문 전체에 걸쳐 '{name_label}'을(를) 자연스럽게 호명하면서 작성해 주세요.
 
 [분석 데이터]
 - 글자 수(공백 제외): {res['char_count']}자
@@ -377,7 +385,7 @@ def display_individual_results(res, title, container_type="info", idx=0):
     st.write("---")
     if st.button(f"🤖 {title} 기반 AI 맞춤형 총평 생성하기", key=f"ai_btn_{idx}"):
         with st.spinner("선생님의 마음으로 글을 꼼꼼히 읽고 총평을 작성하고 있습니다..."):
-            ai_feedback = generate_ai_individual_feedback(res)
+            ai_feedback = generate_ai_individual_feedback(res, st.session_state.get("student_name", ""))
             st.success(f"**💌 선생님 총평:**\n\n{ai_feedback}")
 
 # ==========================================
@@ -392,8 +400,23 @@ def show_input_screen():
 
     st.divider()
 
-    num_texts = st.number_input("평가할 글의 총 개수를 입력하세요.", min_value=1, max_value=10, value=st.session_state.get("num_texts_val", 1), step=1)
-    st.session_state["num_texts_val"] = num_texts
+    name_col, count_col = st.columns([2, 1])
+    with name_col:
+        student_name = st.text_input(
+            "누구의 글을 평가하시나요?",
+            value=st.session_state.get("student_name", ""),
+            placeholder="예: 김민준",
+            key="student_name_input",
+        )
+        st.session_state["student_name"] = student_name
+    with count_col:
+        num_texts = st.number_input(
+            "평가할 글의 총 개수",
+            min_value=1, max_value=10,
+            value=st.session_state.get("num_texts_val", 1),
+            step=1,
+        )
+        st.session_state["num_texts_val"] = num_texts
     st.write("---")
 
     # 개수가 바뀌면 결과 초기화
@@ -448,8 +471,9 @@ def show_input_screen():
             with st.spinner("글을 비교 분석하고 AI 성장 리포트를 작성 중입니다..."):
                 results_list = [analyze_text(t) for t in input_texts]
                 st.session_state["compare_results"] = results_list
-                st.session_state["ai_multi_eval"] = generate_ai_multi_evaluation(results_list)
+                st.session_state["ai_multi_eval"] = generate_ai_multi_evaluation(results_list, student_name)
                 st.session_state["report_num_texts"] = num_texts
+                st.session_state["student_name"] = student_name
                 # 입력 텍스트 저장 (돌아왔을 때 복원용)
                 for i, t in enumerate(input_texts):
                     st.session_state[f"text_saved_{i}"] = t
@@ -467,10 +491,12 @@ def show_report_screen():
     num_texts = st.session_state.get("report_num_texts", len(results_list))
 
     # ── 헤더 ──
+    student_name = st.session_state.get("student_name", "")
+    name_display = f"{student_name} 학생 · " if student_name.strip() else ""
     st.markdown(f"""
     <div class="report-header">
         <h1>📈 시계열 글쓰기 역량 성장 리포트</h1>
-        <p>총 {num_texts}편의 글을 분석한 결과입니다 · AI 종합 총평 포함</p>
+        <p>{name_display}총 {num_texts}편의 글을 분석한 결과입니다 · AI 종합 총평 포함</p>
     </div>
     """, unsafe_allow_html=True)
 
