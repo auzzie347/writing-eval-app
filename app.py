@@ -195,6 +195,15 @@ def load_vocab_data():
 
 vocab_data = load_vocab_data()
 
+@st.cache_data
+def load_vocab_file_bytes():
+    """GitHub 저장소에 함께 올려둔 어휘 목록 원본 파일을 다운로드 버튼용으로 로드"""
+    file_path = "국어 기초 어휘 선정 및 어휘 등급화 목록 전체.xlsx"
+    if not os.path.exists(file_path):
+        return None
+    with open(file_path, "rb") as f:
+        return f.read()
+
 def analyze_text(text):
     char_count_no_spaces = len(text.replace(" ", "").replace("\n", ""))
     tokens = kiwi.tokenize(text)
@@ -368,14 +377,27 @@ def display_individual_results(res, title, container_type="info", idx=0):
     </div>
     """, unsafe_allow_html=True)
 
-    desc_col, dl_col = st.columns([3, 1])
+    desc_col, dl_col = st.columns([2.6, 1])
     with desc_col:
         st.markdown("""
-        <p style="color: #5C6B8A; font-size: 14px; margin: 0;">
-            💡 <b>국어 기초 어휘 선정 및 어휘 등급화 목록이란?</b><br>
-            국립국어원 표준 지침에 따라 1등급(가장 기초적)부터 5등급까지 체계화된 어휘 데이터베이스입니다.
+        <p style="margin: 0; line-height: 1.7;">
+            <span style="color: #1F2D4E; font-size: 19px; font-weight: 700;">💡 국어 기초 어휘 선정 및 어휘 등급화 목록이란?</span><br>
+            <span style="color: #3D4C6E; font-size: 17px;">국립국어원 표준 지침에 따라 1등급(가장 기초적)부터 5등급까지 체계화된 어휘 데이터베이스입니다.</span>
         </p>
         """, unsafe_allow_html=True)
+    with dl_col:
+        vocab_bytes = load_vocab_file_bytes()
+        if vocab_bytes:
+            st.download_button(
+                label="📥 어휘 목록 다운로드",
+                data=vocab_bytes,
+                file_name="국어 기초 어휘 선정 및 어휘 등급화 목록 전체.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                key=f"dl_btn_{idx}",
+                use_container_width=True,
+            )
+        else:
+            st.caption("⚠️ 어휘 목록 파일을 찾을 수 없습니다.")
 
     for grade_name in ["1등급", "2등급", "3등급", "4등급", "5등급", "등급 외"]:
         words_in_grade = res['grade_words'][grade_name]
