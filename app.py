@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from kiwipiepy import Kiwi
 import os
-from google import genai # 💡 공식 라이브러리 사용
+from google import genai  # 💡 공식 라이브러리 사용
 
 # ==========================================
 # 🌟 API 키 설정
@@ -17,68 +17,153 @@ except Exception:
 # ==========================================
 # 🌟 기본 설정 및 CSS 디자인
 # ==========================================
-st.set_page_config(page_title="학생 글쓰기 종합 자동 평가 시스템", layout="wide")
+st.set_page_config(page_title="학생 글쓰기 종합 자동 평가 시스템", page_icon="📝", layout="wide")
 
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+    /* ---------- 전체 배경 & 기본 폰트 ---------- */
     html, body, [class*="css"] {
         font-family: 'Noto Sans KR', sans-serif !important;
     }
-    #MainMenu {visibility: hidden !important;}
-    footer {visibility: hidden !important;}
-    header {visibility: hidden !important;}
-    .block-container {
-        padding-top: 2rem !important;
-        padding-bottom: 2rem !important;
+    .stApp {
+        background: linear-gradient(180deg, #F7F9FD 0%, #EEF3FA 100%) !important;
     }
+    #MainMenu, footer, header {visibility: hidden !important;}
+    .block-container {
+        padding-top: 2.5rem !important;
+        padding-bottom: 3rem !important;
+        max-width: 1200px !important;
+    }
+
+    /* ---------- 제목 타이포그래피 ---------- */
+    h1 {
+        font-family: 'Gowun Dodum', sans-serif !important;
+        color: #1F2D4E !important;
+        font-size: 2.3rem !important;
+        letter-spacing: -0.5px !important;
+    }
+    h2, h3 {
+        font-family: 'Gowun Dodum', sans-serif !important;
+        color: #2A3A63 !important;
+    }
+    .subtitle {
+        color: #5C6B8A;
+        font-size: 1.02rem;
+        margin-top: -8px;
+        margin-bottom: 6px;
+    }
+
+    /* ---------- 텍스트 입력창 ---------- */
     .stTextArea textarea {
-        border-radius: 12px !important;
-        border: 2px solid #eef0f6 !important;
-        box-shadow: inset 2px 2px 5px rgba(0,0,0,0.02) !important;
-        padding: 15px !important;
+        border-radius: 14px !important;
+        border: 2px solid #E2E8F4 !important;
+        background-color: #FFFFFF !important;
+        box-shadow: 0 2px 8px rgba(31,45,78,0.04) !important;
+        padding: 16px !important;
         font-size: 16px !important;
-        transition: border-color 0.3s ease !important;
+        line-height: 1.7 !important;
+        transition: border-color 0.25s ease, box-shadow 0.25s ease !important;
     }
     .stTextArea textarea:focus {
-        border-color: #1A73E8 !important;
-        box-shadow: 0 0 0 2px rgba(26,115,232,0.2) !important;
+        border-color: #3E5C9A !important;
+        box-shadow: 0 0 0 3px rgba(62,92,154,0.15) !important;
     }
-    div[data-testid="metric-container"] {
-        background-color: #ffffff !important;
-        border: 1px solid #eef0f6 !important;
-        padding: 15px 20px !important;
-        border-radius: 12px !important;
-        box-shadow: 0px 4px 10px rgba(0,0,0,0.04) !important;
+
+    /* ---------- 숫자 입력 ---------- */
+    div[data-testid="stNumberInput"] input {
+        border-radius: 10px !important;
+    }
+
+    /* ---------- 지표 카드 ---------- */
+    div[data-testid="stMetric"] {
+        background-color: #FFFFFF !important;
+        border: 1px solid #E6ECF6 !important;
+        padding: 18px 22px !important;
+        border-radius: 16px !important;
+        box-shadow: 0 4px 14px rgba(31,45,78,0.05) !important;
         transition: transform 0.2s ease, box-shadow 0.2s ease !important;
     }
-    div[data-testid="metric-container"]:hover {
-        box-shadow: 0px 8px 15px rgba(0,0,0,0.08) !important;
+    div[data-testid="stMetric"]:hover {
+        box-shadow: 0 10px 22px rgba(31,45,78,0.10) !important;
         transform: translateY(-3px) !important;
     }
+    div[data-testid="stMetric"] label {
+        color: #5C6B8A !important;
+        font-weight: 500 !important;
+    }
+    div[data-testid="stMetricValue"] {
+        color: #1F2D4E !important;
+        font-family: 'Gowun Dodum', sans-serif !important;
+    }
+
+    /* ---------- 버튼 공통 ---------- */
     .stButton > button {
-        border-radius: 8px !important;
+        border-radius: 10px !important;
         font-weight: 600 !important;
-        padding: 10px 24px !important;
-        transition: all 0.3s ease !important;
+        padding: 11px 26px !important;
+        transition: all 0.25s ease !important;
     }
-    button[kind="secondary"]:has(span:contains("시계열")) {
-        background-color: #7E57C2 !important;
-        color: white !important;
+
+    /* 🔴 시계열 분석 버튼 (primary) → 붉은색 */
+    button[kind="primary"] {
+        background: linear-gradient(135deg, #E63946 0%, #C1121F 100%) !important;
+        color: #FFFFFF !important;
         border: none !important;
+        box-shadow: 0 4px 12px rgba(230,57,70,0.35) !important;
+        font-size: 1.05rem !important;
     }
-    button[kind="secondary"]:has(span:contains("시계열")):hover {
-        background-color: #FF4B4B !important;
-        color: white !important;
+    button[kind="primary"]:hover {
+        background: linear-gradient(135deg, #C1121F 0%, #9E0E19 100%) !important;
+        box-shadow: 0 6px 18px rgba(230,57,70,0.45) !important;
+        transform: translateY(-2px) !important;
     }
-    button[kind="secondary"]:not(:has(span:contains("시계열"))) {
-        background-color: #ffffff !important;
-        color: #333333 !important;
-        border: 1px solid #e0e0e0 !important;
+
+    /* ⚪ 일반 버튼 (secondary) → 깔끔한 흰색 카드 스타일 */
+    button[kind="secondary"] {
+        background-color: #FFFFFF !important;
+        color: #2A3A63 !important;
+        border: 1.5px solid #D5DEEE !important;
+        box-shadow: 0 2px 6px rgba(31,45,78,0.04) !important;
     }
-    button[kind="secondary"]:not(:has(span:contains("시계열"))):hover {
-        border: 1px solid #7E57C2 !important;
-        color: #7E57C2 !important;
+    button[kind="secondary"]:hover {
+        border-color: #3E5C9A !important;
+        color: #3E5C9A !important;
+        box-shadow: 0 4px 12px rgba(62,92,154,0.15) !important;
+        transform: translateY(-1px) !important;
+    }
+
+    /* ---------- 탭 ---------- */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+        background-color: transparent !important;
+    }
+    .stTabs [data-baseweb="tab"] {
+        background-color: #FFFFFF !important;
+        border: 1px solid #E2E8F4 !important;
+        border-radius: 10px 10px 0 0 !important;
+        padding: 10px 20px !important;
+        color: #5C6B8A !important;
+        font-weight: 500 !important;
+    }
+    .stTabs [aria-selected="true"] {
+        background-color: #2A3A63 !important;
+        color: #FFFFFF !important;
+        border-color: #2A3A63 !important;
+    }
+
+    /* ---------- Expander ---------- */
+    div[data-testid="stExpander"] {
+        background-color: #FFFFFF !important;
+        border: 1px solid #E6ECF6 !important;
+        border-radius: 12px !important;
+        box-shadow: 0 2px 8px rgba(31,45,78,0.04) !important;
+    }
+
+    /* ---------- 구분선 ---------- */
+    hr {
+        border-color: #DDE5F1 !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -113,12 +198,12 @@ vocab_data = load_vocab_data()
 def analyze_text(text):
     char_count_no_spaces = len(text.replace(" ", "").replace("\n", ""))
     tokens = kiwi.tokenize(text)
-    
+
     found_nouns, found_verbs = {}, {}
     grade_words = {"1등급": {}, "2등급": {}, "3등급": {}, "4등급": {}, "5등급": {}, "등급 외": {}}
-    
+
     total_noun_count = total_verb_count = 0
-    
+
     for token in tokens:
         word_form = token.form
         if token.tag.startswith('N'):
@@ -131,7 +216,7 @@ def analyze_text(text):
             total_verb_count += 1
         else:
             continue
-            
+
         grade = vocab_data.get(word_to_check)
         if grade and isinstance(grade, str):
             grade_cleaned = grade.strip()
@@ -141,8 +226,9 @@ def analyze_text(text):
                 grade_words["등급 외"][word_to_check] = grade_words["등급 외"].get(word_to_check, 0) + 1
         else:
             grade_words["등급 외"][word_to_check] = grade_words["등급 외"].get(word_to_check, 0) + 1
-            
+
     return {
+        "text": text,  # 💡 AI가 글의 내용·체계성을 평가할 수 있도록 원문 저장
         "char_count": char_count_no_spaces,
         "nouns": found_nouns, "verbs": found_verbs,
         "total_nouns": total_noun_count, "total_verbs": total_verb_count,
@@ -154,28 +240,57 @@ def format_word_dict(word_dict):
     sorted_words = sorted(word_dict.items(), key=lambda x: x[1], reverse=True)
     return ", ".join([f"**{word}**({count})" for word, count in sorted_words])
 
+def grade_summary_text(res):
+    """기초어휘 등급별 사용 개수를 프롬프트용 문자열로 요약"""
+    parts = []
+    for g in ["1등급", "2등급", "3등급", "4등급", "5등급", "등급 외"]:
+        cnt = sum(res["grade_words"][g].values())
+        kinds = len(res["grade_words"][g])
+        parts.append(f"{g} {cnt}개({kinds}종)")
+    return " / ".join(parts)
+
 # ==========================================
 # 🌟 AI 평가문 생성 로직 (google-genai SDK 방식)
 # ==========================================
+MAX_TEXT_LEN = 2500  # 프롬프트에 넣을 글 원문 최대 길이(회차당)
+
 def generate_ai_multi_evaluation(results_list):
     if not API_KEY_EXISTS:
         return "⚠️ API 키가 설정되지 않아 AI 종합 총평을 생성할 수 없습니다."
-    
+
     num_texts = len(results_list)
-    first = results_list[0]
-    last = results_list[-1]
-    
-    prompt = f"""
-    학생이 작성한 총 {num_texts}편의 연쇄적인 글쓰기 형태소 분석 데이터입니다.
 
-    [첫 번째 글 데이터]
-    - 글자 수: {first['char_count']}자 / 명사: {first['total_nouns']}개 / 동사: {first['total_verbs']}개
+    data_blocks = []
+    for i, res in enumerate(results_list):
+        excerpt = res["text"][:MAX_TEXT_LEN]
+        data_blocks.append(f"""
+[{i+1}번째 글]
+- 글자 수(공백 제외): {res['char_count']}자
+- 명사 사용량: {res['total_nouns']}개 / 동사 사용량: {res['total_verbs']}개
+- 기초어휘 등급별 분포: {grade_summary_text(res)}
+- 글 원문:
+\"\"\"{excerpt}\"\"\"
+""")
 
-    [가장 최근 글 데이터]
-    - 글자 수: {last['char_count']}자 / 명사: {last['total_nouns']}개 / 동사: {last['total_verbs']}개
+    prompt = f"""당신은 초등학생의 글쓰기 성장을 오랫동안 지도해 온 경험 많고 다정한 국어 선생님입니다.
+학생이 시간 순서대로 작성한 총 {num_texts}편의 글과 형태소 분석 데이터가 아래에 있습니다.
 
-    초등학생 아이들의 성장을 가장 가까이서 지켜보는 따뜻한 선생님의 어조로, 위 데이터의 양적 변화와 어휘력의 발전을 토대로 학생의 성장을 칭찬하고 앞으로의 글쓰기를 격려하는 종합 평가문(300자 내외)을 부드럽고 다정한 말투로 작성해 주세요. (기계적인 수치 나열보다는 의미를 짚어주세요.)
-    """
+{''.join(data_blocks)}
+
+위 자료를 모두 종합하여, 학생의 글쓰기 역량 향상에 대한 구체적인 종합 평가문을 1000자 내외로 작성해 주세요.
+반드시 다음 네 가지 관점을 균형 있게 담아 주세요.
+
+1. [양적 성장] 글자 수, 명사·동사 사용량이 회차에 따라 어떻게 변화했는지, 그 변화가 갖는 의미
+2. [어휘 수준] 기초어휘 등급(1~5등급) 분포를 근거로 어휘 사용 수준이 어떻게 발전했는지 (고학년 수준 어휘·등급 외 어휘 사용 등)
+3. [내용과 체계성] 각 글의 원문을 직접 읽고, 주제 표현, 생각의 깊이, 문단 구성, 글의 흐름과 짜임새가 어떻게 달라졌는지 구체적인 표현이나 문장을 예로 들어 평가
+4. [앞으로의 방향] 다음 글쓰기에서 도전해 보면 좋을 점을 1~2가지 구체적으로 제안
+
+작성 규칙:
+- 따뜻하고 다정한 선생님의 말투로, 학생과 학부모가 함께 읽을 수 있는 글로 작성
+- 수치를 기계적으로 나열하지 말고, 수치가 보여주는 성장의 '의미'를 해석해서 서술
+- 잘한 점을 먼저 충분히 칭찬한 뒤, 개선점은 격려하는 방식으로 제안
+- 전체 분량은 1000자 내외(900~1100자)로 작성
+"""
     try:
         client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
         response = client.models.generate_content(
@@ -189,15 +304,33 @@ def generate_ai_multi_evaluation(results_list):
 def generate_ai_individual_feedback(res):
     if not API_KEY_EXISTS:
         return "⚠️ API 키를 설정해주세요."
-    
-    prompt = f"""
-    학생이 방금 작성한 단편 글의 분석 데이터입니다.
-    - 글자 수: {res['char_count']}자
-    - 주요 명사: {list(res['nouns'].keys())[:5]} 등 총 {res['total_nouns']}개
-    - 주요 동사: {list(res['verbs'].keys())[:5]} 등 총 {res['total_verbs']}개
-    
-    초등학생을 가르치는 다정한 선생님의 관점에서, 사용된 어휘를 바탕으로 아이가 어떤 재미있는 생각을 글로 표현했는지 칭찬하고 북돋아주는 짧은 피드백(150자 내외)을 작성해 주세요.
-    """
+
+    excerpt = res["text"][:MAX_TEXT_LEN]
+    prompt = f"""당신은 초등학생의 글쓰기를 지도하는 경험 많고 다정한 국어 선생님입니다.
+학생이 방금 작성한 글과 형태소 분석 데이터가 아래에 있습니다.
+
+[분석 데이터]
+- 글자 수(공백 제외): {res['char_count']}자
+- 명사 사용량: {res['total_nouns']}개 / 동사 사용량: {res['total_verbs']}개
+- 기초어휘 등급별 분포: {grade_summary_text(res)}
+
+[글 원문]
+\"\"\"{excerpt}\"\"\"
+
+위 자료를 바탕으로, 이 글에 대한 선생님 총평을 1000자 내외로 작성해 주세요.
+반드시 다음 네 가지 관점을 담아 주세요.
+
+1. [양적 특징] 글자 수, 명사·동사 사용량이 보여주는 글의 특징 (표현의 풍부함, 서술의 구체성 등)
+2. [어휘 수준] 기초어휘 등급 분포를 근거로 학생의 어휘 사용 수준 평가 (인상 깊은 어휘가 있다면 직접 인용)
+3. [내용과 체계성] 글의 원문을 직접 읽고 주제 표현, 생각의 깊이, 문단 구성, 글의 흐름을 구체적인 문장을 예로 들어 평가
+4. [성장 제안] 글쓰기 역량을 더 키우기 위해 다음 글에서 시도해 보면 좋을 점 1~2가지
+
+작성 규칙:
+- 따뜻하고 다정한 선생님의 말투로 작성
+- 수치의 기계적 나열이 아니라 그 의미를 해석해서 서술
+- 잘한 점을 먼저 충분히 칭찬한 뒤, 개선점은 격려하는 방식으로 제안
+- 전체 분량은 1000자 내외(900~1100자)로 작성
+"""
     try:
         client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
         response = client.models.generate_content(
@@ -214,12 +347,12 @@ def generate_ai_individual_feedback(res):
 def display_individual_results(res, title, container_type="info", idx=0):
     if container_type == "info": st.info(f"### {title}")
     else: st.success(f"### {title}")
-        
+
     c1, c2, c3 = st.columns(3)
     c1.metric("글자 수 (공백 제외)", f"{res['char_count']}자")
     c2.metric("명사 사용량", f"{res['total_nouns']}개")
     c3.metric("동사 사용량", f"{res['total_verbs']}개")
-    
+
     st.write("")
     n_col, v_col = st.columns(2)
     with n_col:
@@ -228,40 +361,40 @@ def display_individual_results(res, title, container_type="info", idx=0):
     with v_col:
         with st.expander(f"📋 동사 목록 ({len(res['verbs'])}종)"):
             st.write(format_word_dict(res['verbs']))
-            
+
     st.markdown("""
-    <div style="background-color: #f1f3f4; padding: 12px 18px; border-left: 5px solid #1a73e8; border-radius: 4px; margin-top: 15px; margin-bottom: 10px;">
-        <h2 style="margin: 0; color: #202124; font-size: 24px; font-weight: bold;">📚 수준별 기초 어휘 세부 분포</h2>
+    <div style="background: linear-gradient(90deg, #FFFFFF 0%, #F2F6FC 100%); padding: 14px 20px; border-left: 5px solid #2A3A63; border-radius: 10px; margin-top: 18px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(31,45,78,0.05);">
+        <h2 style="margin: 0; color: #1F2D4E; font-size: 22px; font-weight: bold; font-family: 'Gowun Dodum', sans-serif;">📚 수준별 기초 어휘 세부 분포</h2>
     </div>
     """, unsafe_allow_html=True)
-    
+
     desc_col, dl_col = st.columns([3, 1])
     with desc_col:
         st.markdown("""
-        <p style="color: #5f6368; font-size: 14px; margin: 0;">
+        <p style="color: #5C6B8A; font-size: 14px; margin: 0;">
             💡 <b>국어 기초 어휘 선정 및 어휘 등급화 목록이란?</b><br>
             국립국어원 표준 지침에 따라 1등급(가장 기초적)부터 5등급까지 체계화된 어휘 데이터베이스입니다.
         </p>
         """, unsafe_allow_html=True)
-        
+
     for grade_name in ["1등급", "2등급", "3등급", "4등급", "5등급", "등급 외"]:
         words_in_grade = res['grade_words'][grade_name]
         total_grade_count = sum(words_in_grade.values())
         if total_grade_count > 0:
             with st.expander(f"{grade_name} ➔ 총 {total_grade_count}개 ({len(words_in_grade)}종)"):
                 st.write(format_word_dict(words_in_grade))
-                
+
     st.write("---")
-    if st.button(f"🤖 {title} 기반 AI 맞춤형 코멘트 생성하기", key=f"ai_btn_{idx}"):
-        with st.spinner("선생님의 마음으로 따뜻한 코멘트를 작성하고 있습니다..."):
+    if st.button(f"🤖 {title} 기반 AI 맞춤형 총평 생성하기", key=f"ai_btn_{idx}"):
+        with st.spinner("선생님의 마음으로 글을 꼼꼼히 읽고 총평을 작성하고 있습니다..."):
             ai_feedback = generate_ai_individual_feedback(res)
-            st.success(f"**💌선생님 총평:**\n\n{ai_feedback}")
+            st.success(f"**💌 선생님 총평:**\n\n{ai_feedback}")
 
 # ==========================================
 # 🌟 메인 화면 구성
 # ==========================================
 st.title("📝 학생 글쓰기 종합 자동 평가 시스템")
-st.write("평가할 글의 개수를 설정하고, 단편 진단부터 다회차 성장 추적까지 한 번에 관리하세요.")
+st.markdown('<p class="subtitle">평가할 글의 개수를 설정하고, 단편 진단부터 다회차 성장 추적까지 한 번에 관리하세요.</p>', unsafe_allow_html=True)
 
 if not API_KEY_EXISTS:
     st.warning("⚠️ **현재 AI API 키가 연결되어 있지 않습니다.**")
@@ -294,14 +427,14 @@ for i, tab in enumerate(tabs):
     with tab:
         text_val = st.text_area(f"{i+1}번째 글", height=300, key=f"text_{i}", label_visibility="collapsed", placeholder=f"{i+1}번째 글을 붙여넣으세요...")
         input_texts.append(text_val)
-        
+
         if st.button(f"✨ {i+1}번째 글쓰기 분석 및 평가하기", key=f"btn_eval_{i}"):
             if text_val.strip():
                 with st.spinner("정밀 분석 중입니다..."):
                     st.session_state[f"res_{i}"] = analyze_text(text_val)
             else:
                 st.warning("분석할 텍스트를 먼저 입력해 주세요.")
-                
+
         if f"res_{i}" in st.session_state:
             st.divider()
             c_type = "info" if i % 2 == 0 else "success"
@@ -321,7 +454,7 @@ if "compare_results" in st.session_state:
     st.divider()
     st.header("📈 누적 역량 성장 리포트")
     st.subheader("📉 주요 글쓰기 지표 시계열 변화 곡선")
-    
+
     trends = []
     for i, res in enumerate(results_list):
         trends.append({
@@ -330,7 +463,7 @@ if "compare_results" in st.session_state:
             "동사 수": res["total_verbs"]
         })
     chart_df = pd.DataFrame(trends, index=[f"{i+1}회차" for i in range(num_texts)])
-    
+
     layout_col1, layout_col2 = st.columns([1.1, 1])
     with layout_col1:
         st.write("**[회차별 지표 변동 꺾은선 그래프]**")
@@ -338,7 +471,7 @@ if "compare_results" in st.session_state:
     with layout_col2:
         st.write("**[🤖 AI 맞춤형 종합 총평]**")
         st.warning(st.session_state.get("ai_multi_eval", "평가문이 없습니다."))
-        
+
     st.divider()
     st.header("🔍 상세 리포트")
     result_tabs = st.tabs([f"{i+1}번째 상세" for i in range(num_texts)])
