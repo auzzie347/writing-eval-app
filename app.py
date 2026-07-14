@@ -24,15 +24,15 @@ st.markdown("""
     @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 
     html, body, [class*="css"] { font-family: 'Noto Sans KR', sans-serif !important; }
-    /* 회색 톤 배경 */
-    .stApp { background: linear-gradient(180deg, #D6D9DF 0%, #C8CDD6 100%) !important; }
+    /* 진한 회색 톤 배경 */
+    .stApp { background: linear-gradient(180deg, #6B7280 0%, #4B5563 100%) !important; }
     #MainMenu, footer, header { visibility: hidden !important; }
     .block-container {
         padding-top: 2.5rem !important; padding-bottom: 3rem !important;
         max-width: 1200px !important;
-        background-color: #F4F5F7 !important;
+        background-color: #F8F9FA !important;
         border-radius: 18px !important;
-        box-shadow: 0 6px 28px rgba(0,0,0,0.12) !important;
+        box-shadow: 0 8px 36px rgba(0,0,0,0.30) !important;
         padding-left: 2.5rem !important;
         padding-right: 2.5rem !important;
     }
