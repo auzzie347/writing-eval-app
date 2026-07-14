@@ -24,22 +24,22 @@ st.markdown("""
     @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 
     html, body, [class*="css"] { font-family: 'Noto Sans KR', sans-serif !important; }
-    /* 진한 회색 톤 배경 */
-    .stApp { background: linear-gradient(180deg, #6B7280 0%, #4B5563 100%) !important; }
+    /* 💜 보라 톤 배경 - 내외부 통일 */
+    .stApp { background: linear-gradient(160deg, #6B4F9E 0%, #4A3380 100%) !important; }
     #MainMenu, footer, header { visibility: hidden !important; }
     .block-container {
         padding-top: 2.5rem !important; padding-bottom: 3rem !important;
         max-width: 1200px !important;
-        background-color: #B0B8C4 !important;
-        border-radius: 18px !important;
-        box-shadow: 0 8px 36px rgba(0,0,0,0.30) !important;
+        background: linear-gradient(160deg, #6B4F9E 0%, #4A3380 100%) !important;
+        border-radius: 0px !important;
+        box-shadow: none !important;
         padding-left: 2.5rem !important;
         padding-right: 2.5rem !important;
     }
 
-    h1 { font-family: 'Gowun Dodum', sans-serif !important; color: #1F2D4E !important; font-size: 2.3rem !important; letter-spacing: -0.5px !important; }
-    h2, h3 { font-family: 'Gowun Dodum', sans-serif !important; color: #1A2A4A !important; }
-    .subtitle { color: #2C3A52; font-size: 1.02rem; margin-top: -8px; margin-bottom: 6px; font-weight: 500; }
+    h1 { font-family: 'Gowun Dodum', sans-serif !important; color: #FFFFFF !important; font-size: 2.3rem !important; letter-spacing: -0.5px !important; }
+    h2, h3 { font-family: 'Gowun Dodum', sans-serif !important; color: #F0E8FF !important; }
+    .subtitle { color: #D8C8F8; font-size: 1.02rem; margin-top: -8px; margin-bottom: 6px; font-weight: 500; }
 
     .report-header {
         background: linear-gradient(135deg, #1F2D4E 0%, #2A3A63 100%);
@@ -49,64 +49,63 @@ st.markdown("""
     .report-header h1 { color: white !important; font-size: 1.9rem !important; margin: 0 !important; }
     .report-header p { color: #BFD0EE !important; margin: 6px 0 0 0 !important; font-size: 1rem; }
 
-    /* ── 텍스트 입력 (이름, 제목) ── */
     div[data-testid="stTextInput"] input {
         background-color: #FFFFFF !important;
-        border: 2px solid #8FA4C8 !important;
+        border: 2px solid #C4A8F0 !important;
         border-radius: 10px !important;
         padding: 12px 16px !important;
         font-size: 16px !important;
-        color: #1F2D4E !important;
-        box-shadow: 0 2px 6px rgba(31,45,78,0.10) !important;
+        color: #2D1B6B !important;
+        box-shadow: 0 2px 8px rgba(75,51,128,0.15) !important;
         transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
     }
     div[data-testid="stTextInput"] input:focus {
-        border-color: #2A3A63 !important;
-        box-shadow: 0 0 0 3px rgba(42,58,99,0.20) !important;
+        border-color: #8B5CF6 !important;
+        box-shadow: 0 0 0 3px rgba(139,92,246,0.30) !important;
         outline: none !important;
     }
     div[data-testid="stTextInput"] label {
         font-size: 15px !important;
         font-weight: 600 !important;
-        color: #2A3A63 !important;
+        color: #FFFFFF !important;
     }
 
     /* ── 숫자 입력 (글 개수) ── */
     div[data-testid="stNumberInput"] input {
         background-color: #FFFFFF !important;
-        border: 2px solid #8FA4C8 !important;
+        border: 2px solid #C4A8F0 !important;
         border-radius: 10px !important;
         padding: 12px 16px !important;
         font-size: 16px !important;
-        color: #1F2D4E !important;
-        box-shadow: 0 2px 6px rgba(31,45,78,0.10) !important;
+        color: #2D1B6B !important;
+        box-shadow: 0 2px 8px rgba(75,51,128,0.15) !important;
         transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
     }
     div[data-testid="stNumberInput"] input:focus {
-        border-color: #2A3A63 !important;
-        box-shadow: 0 0 0 3px rgba(42,58,99,0.20) !important;
+        border-color: #8B5CF6 !important;
+        box-shadow: 0 0 0 3px rgba(139,92,246,0.30) !important;
     }
     div[data-testid="stNumberInput"] label {
         font-size: 15px !important;
         font-weight: 600 !important;
-        color: #2A3A63 !important;
+        color: #FFFFFF !important;
     }
 
     /* ── 텍스트 영역 (글 본문) ── */
     .stTextArea textarea {
         border-radius: 14px !important;
-        border: 2px solid #8FA4C8 !important;
+        border: 2px solid #C4A8F0 !important;
         background-color: #FFFFFF !important;
-        box-shadow: 0 2px 8px rgba(31,45,78,0.08) !important;
+        box-shadow: 0 2px 8px rgba(75,51,128,0.12) !important;
         padding: 16px !important;
         font-size: 16px !important;
         line-height: 1.7 !important;
-        color: #1F2D4E !important;
+        color: #2D1B6B !important;
         transition: border-color 0.25s ease, box-shadow 0.25s ease !important;
     }
     .stTextArea textarea:focus {
-        border-color: #2A3A63 !important;
-        box-shadow: 0 0 0 3px rgba(42,58,99,0.20) !important;
+        border-color: #8B5CF6 !important;
+        box-shadow: 0 0 0 3px rgba(139,92,246,0.25) !important;
     }
 
     div[data-testid="stMetric"] {
