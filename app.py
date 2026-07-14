@@ -24,22 +24,22 @@ st.markdown("""
     @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 
     html, body, [class*="css"] { font-family: 'Noto Sans KR', sans-serif !important; }
-    /* 💜 보라 톤 배경 - 내외부 통일 */
-    .stApp { background: linear-gradient(160deg, #6B4F9E 0%, #4A3380 100%) !important; }
+    /* 💜 연한 보라 톤 배경 - 내외부 통일 */
+    .stApp { background: linear-gradient(160deg, #EDE8F5 0%, #E4DCF0 100%) !important; }
     #MainMenu, footer, header { visibility: hidden !important; }
     .block-container {
         padding-top: 2.5rem !important; padding-bottom: 3rem !important;
         max-width: 1200px !important;
-        background: linear-gradient(160deg, #6B4F9E 0%, #4A3380 100%) !important;
+        background: linear-gradient(160deg, #EDE8F5 0%, #E4DCF0 100%) !important;
         border-radius: 0px !important;
         box-shadow: none !important;
         padding-left: 2.5rem !important;
         padding-right: 2.5rem !important;
     }
 
-    h1 { font-family: 'Gowun Dodum', sans-serif !important; color: #FFFFFF !important; font-size: 2.3rem !important; letter-spacing: -0.5px !important; }
-    h2, h3 { font-family: 'Gowun Dodum', sans-serif !important; color: #F0E8FF !important; }
-    .subtitle { color: #D8C8F8; font-size: 1.02rem; margin-top: -8px; margin-bottom: 6px; font-weight: 500; }
+    h1 { font-family: 'Gowun Dodum', sans-serif !important; color: #2D1B6B !important; font-size: 2.3rem !important; letter-spacing: -0.5px !important; }
+    h2, h3 { font-family: 'Gowun Dodum', sans-serif !important; color: #3D2A7A !important; }
+    .subtitle { color: #5A4080; font-size: 1.02rem; margin-top: -8px; margin-bottom: 6px; font-weight: 500; }
 
     .report-header {
         background: linear-gradient(135deg, #1F2D4E 0%, #2A3A63 100%);
@@ -67,7 +67,7 @@ st.markdown("""
     div[data-testid="stTextInput"] label {
         font-size: 15px !important;
         font-weight: 600 !important;
-        color: #FFFFFF !important;
+        color: #3D2A7A !important;
     }
 
     /* ── 숫자 입력 (글 개수) ── */
@@ -88,7 +88,7 @@ st.markdown("""
     div[data-testid="stNumberInput"] label {
         font-size: 15px !important;
         font-weight: 600 !important;
-        color: #FFFFFF !important;
+        color: #3D2A7A !important;
     }
 
     /* ── 텍스트 영역 (글 본문) ── */
