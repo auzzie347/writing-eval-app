@@ -30,7 +30,7 @@ st.markdown("""
     .block-container {
         padding-top: 2.5rem !important; padding-bottom: 3rem !important;
         max-width: 1200px !important;
-        background-color: #F8F9FA !important;
+        background-color: #B0B8C4 !important;
         border-radius: 18px !important;
         box-shadow: 0 8px 36px rgba(0,0,0,0.30) !important;
         padding-left: 2.5rem !important;
@@ -38,8 +38,8 @@ st.markdown("""
     }
 
     h1 { font-family: 'Gowun Dodum', sans-serif !important; color: #1F2D4E !important; font-size: 2.3rem !important; letter-spacing: -0.5px !important; }
-    h2, h3 { font-family: 'Gowun Dodum', sans-serif !important; color: #2A3A63 !important; }
-    .subtitle { color: #5C6B8A; font-size: 1.02rem; margin-top: -8px; margin-bottom: 6px; }
+    h2, h3 { font-family: 'Gowun Dodum', sans-serif !important; color: #1A2A4A !important; }
+    .subtitle { color: #2C3A52; font-size: 1.02rem; margin-top: -8px; margin-bottom: 6px; font-weight: 500; }
 
     .report-header {
         background: linear-gradient(135deg, #1F2D4E 0%, #2A3A63 100%);
