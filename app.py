@@ -24,46 +24,90 @@ st.markdown("""
     @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 
     html, body, [class*="css"] { font-family: 'Noto Sans KR', sans-serif !important; }
-    .stApp { background: linear-gradient(180deg, #F7F9FD 0%, #EEF3FA 100%) !important; }
+    /* 회색 톤 배경 */
+    .stApp { background: linear-gradient(180deg, #D6D9DF 0%, #C8CDD6 100%) !important; }
     #MainMenu, footer, header { visibility: hidden !important; }
     .block-container {
-        padding-top: 2.5rem !important;
-        padding-bottom: 3rem !important;
+        padding-top: 2.5rem !important; padding-bottom: 3rem !important;
         max-width: 1200px !important;
+        background-color: #F4F5F7 !important;
+        border-radius: 18px !important;
+        box-shadow: 0 6px 28px rgba(0,0,0,0.12) !important;
+        padding-left: 2.5rem !important;
+        padding-right: 2.5rem !important;
     }
 
-    h1 {
-        font-family: 'Gowun Dodum', sans-serif !important;
-        color: #1F2D4E !important;
-        font-size: 2.3rem !important;
-        letter-spacing: -0.5px !important;
-    }
+    h1 { font-family: 'Gowun Dodum', sans-serif !important; color: #1F2D4E !important; font-size: 2.3rem !important; letter-spacing: -0.5px !important; }
     h2, h3 { font-family: 'Gowun Dodum', sans-serif !important; color: #2A3A63 !important; }
     .subtitle { color: #5C6B8A; font-size: 1.02rem; margin-top: -8px; margin-bottom: 6px; }
 
-    /* 리포트 화면 헤더 배지 */
     .report-header {
         background: linear-gradient(135deg, #1F2D4E 0%, #2A3A63 100%);
-        color: white !important;
-        padding: 28px 36px;
-        border-radius: 18px;
-        margin-bottom: 28px;
-        box-shadow: 0 8px 24px rgba(31,45,78,0.18);
+        color: white !important; padding: 28px 36px; border-radius: 18px;
+        margin-bottom: 28px; box-shadow: 0 8px 24px rgba(31,45,78,0.18);
     }
     .report-header h1 { color: white !important; font-size: 1.9rem !important; margin: 0 !important; }
     .report-header p { color: #BFD0EE !important; margin: 6px 0 0 0 !important; font-size: 1rem; }
 
+    /* ── 텍스트 입력 (이름, 제목) ── */
+    div[data-testid="stTextInput"] input {
+        background-color: #FFFFFF !important;
+        border: 2px solid #8FA4C8 !important;
+        border-radius: 10px !important;
+        padding: 12px 16px !important;
+        font-size: 16px !important;
+        color: #1F2D4E !important;
+        box-shadow: 0 2px 6px rgba(31,45,78,0.10) !important;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+    }
+    div[data-testid="stTextInput"] input:focus {
+        border-color: #2A3A63 !important;
+        box-shadow: 0 0 0 3px rgba(42,58,99,0.20) !important;
+        outline: none !important;
+    }
+    div[data-testid="stTextInput"] label {
+        font-size: 15px !important;
+        font-weight: 600 !important;
+        color: #2A3A63 !important;
+    }
+
+    /* ── 숫자 입력 (글 개수) ── */
+    div[data-testid="stNumberInput"] input {
+        background-color: #FFFFFF !important;
+        border: 2px solid #8FA4C8 !important;
+        border-radius: 10px !important;
+        padding: 12px 16px !important;
+        font-size: 16px !important;
+        color: #1F2D4E !important;
+        box-shadow: 0 2px 6px rgba(31,45,78,0.10) !important;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+    }
+    div[data-testid="stNumberInput"] input:focus {
+        border-color: #2A3A63 !important;
+        box-shadow: 0 0 0 3px rgba(42,58,99,0.20) !important;
+    }
+    div[data-testid="stNumberInput"] label {
+        font-size: 15px !important;
+        font-weight: 600 !important;
+        color: #2A3A63 !important;
+    }
+
+    /* ── 텍스트 영역 (글 본문) ── */
     .stTextArea textarea {
-        border-radius: 14px !important; border: 2px solid #E2E8F4 !important;
-        background-color: #FFFFFF !important; box-shadow: 0 2px 8px rgba(31,45,78,0.04) !important;
-        padding: 16px !important; font-size: 16px !important; line-height: 1.7 !important;
+        border-radius: 14px !important;
+        border: 2px solid #8FA4C8 !important;
+        background-color: #FFFFFF !important;
+        box-shadow: 0 2px 8px rgba(31,45,78,0.08) !important;
+        padding: 16px !important;
+        font-size: 16px !important;
+        line-height: 1.7 !important;
+        color: #1F2D4E !important;
         transition: border-color 0.25s ease, box-shadow 0.25s ease !important;
     }
     .stTextArea textarea:focus {
-        border-color: #3E5C9A !important;
-        box-shadow: 0 0 0 3px rgba(62,92,154,0.15) !important;
+        border-color: #2A3A63 !important;
+        box-shadow: 0 0 0 3px rgba(42,58,99,0.20) !important;
     }
-    div[data-testid="stNumberInput"] input { border-radius: 10px !important; }
 
     div[data-testid="stMetric"] {
         background-color: #FFFFFF !important; border: 1px solid #E6ECF6 !important;
@@ -71,17 +115,12 @@ st.markdown("""
         box-shadow: 0 4px 14px rgba(31,45,78,0.05) !important;
         transition: transform 0.2s ease, box-shadow 0.2s ease !important;
     }
-    div[data-testid="stMetric"]:hover {
-        box-shadow: 0 10px 22px rgba(31,45,78,0.10) !important;
-        transform: translateY(-3px) !important;
-    }
+    div[data-testid="stMetric"]:hover { box-shadow: 0 10px 22px rgba(31,45,78,0.10) !important; transform: translateY(-3px) !important; }
     div[data-testid="stMetric"] label { color: #5C6B8A !important; font-weight: 500 !important; }
     div[data-testid="stMetricValue"] { color: #1F2D4E !important; font-family: 'Gowun Dodum', sans-serif !important; }
 
-    .stButton > button {
-        border-radius: 10px !important; font-weight: 600 !important;
-        padding: 11px 26px !important; transition: all 0.25s ease !important;
-    }
+    .stButton > button { border-radius: 10px !important; font-weight: 600 !important; padding: 11px 26px !important; transition: all 0.25s ease !important; }
+
     /* 🔴 시계열 분석 버튼 (primary) */
     button[kind="primary"] {
         background: linear-gradient(135deg, #E63946 0%, #C1121F 100%) !important;
@@ -90,43 +129,52 @@ st.markdown("""
     }
     button[kind="primary"]:hover {
         background: linear-gradient(135deg, #C1121F 0%, #9E0E19 100%) !important;
-        box-shadow: 0 6px 18px rgba(230,57,70,0.45) !important;
-        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 18px rgba(230,57,70,0.45) !important; transform: translateY(-2px) !important;
     }
+
     /* ⚪ 일반 버튼 */
     button[kind="secondary"] {
         background-color: #FFFFFF !important; color: #2A3A63 !important;
         border: 1.5px solid #D5DEEE !important; box-shadow: 0 2px 6px rgba(31,45,78,0.04) !important;
     }
-    button[kind="secondary"]:hover {
-        border-color: #3E5C9A !important; color: #3E5C9A !important;
-        box-shadow: 0 4px 12px rgba(62,92,154,0.15) !important; transform: translateY(-1px) !important;
-    }
+    button[kind="secondary"]:hover { border-color: #3E5C9A !important; color: #3E5C9A !important; box-shadow: 0 4px 12px rgba(62,92,154,0.15) !important; transform: translateY(-1px) !important; }
 
     .stTabs [data-baseweb="tab-list"] { gap: 8px; background-color: transparent !important; }
-    .stTabs [data-baseweb="tab"] {
-        background-color: #FFFFFF !important; border: 1px solid #E2E8F4 !important;
-        border-radius: 10px 10px 0 0 !important; padding: 10px 20px !important;
-        color: #5C6B8A !important; font-weight: 500 !important;
-    }
-    .stTabs [aria-selected="true"] {
-        background-color: #2A3A63 !important; color: #FFFFFF !important; border-color: #2A3A63 !important;
-    }
+    .stTabs [data-baseweb="tab"] { background-color: #FFFFFF !important; border: 1px solid #E2E8F4 !important; border-radius: 10px 10px 0 0 !important; padding: 10px 20px !important; color: #5C6B8A !important; font-weight: 500 !important; }
+    .stTabs [aria-selected="true"] { background-color: #2A3A63 !important; color: #FFFFFF !important; border-color: #2A3A63 !important; }
 
-    div[data-testid="stExpander"] {
-        background-color: #FFFFFF !important; border: 1px solid #E6ECF6 !important;
-        border-radius: 12px !important; box-shadow: 0 2px 8px rgba(31,45,78,0.04) !important;
-    }
+    div[data-testid="stExpander"] { background-color: #FFFFFF !important; border: 1px solid #E6ECF6 !important; border-radius: 12px !important; box-shadow: 0 2px 8px rgba(31,45,78,0.04) !important; }
     hr { border-color: #DDE5F1 !important; }
 
-    /* 뒤로가기 버튼 강조 */
-    .back-btn button {
-        background-color: #FFFFFF !important; color: #1F2D4E !important;
-        border: 2px solid #2A3A63 !important; font-size: 1rem !important;
-        padding: 12px 30px !important;
+    /* 🩷 분홍색 버튼 클래스 */
+    .pink-btn button {
+        background: linear-gradient(135deg, #FF6B9D 0%, #E91E8C 100%) !important;
+        color: #FFFFFF !important; border: none !important;
+        box-shadow: 0 4px 12px rgba(233,30,140,0.30) !important;
+        font-size: 1rem !important;
     }
-    .back-btn button:hover {
-        background-color: #2A3A63 !important; color: #FFFFFF !important;
+    .pink-btn button:hover {
+        background: linear-gradient(135deg, #E91E8C 0%, #C2185B 100%) !important;
+        box-shadow: 0 6px 18px rgba(233,30,140,0.40) !important; transform: translateY(-2px) !important;
+    }
+
+    /* 🖨️ 프린트 버튼 */
+    .print-btn button {
+        background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%) !important;
+        color: #FFFFFF !important; border: none !important;
+        box-shadow: 0 4px 12px rgba(46,125,50,0.30) !important;
+    }
+    .print-btn button:hover {
+        background: linear-gradient(135deg, #2E7D32 0%, #1B5E20 100%) !important;
+        box-shadow: 0 6px 18px rgba(46,125,50,0.40) !important; transform: translateY(-2px) !important;
+    }
+
+    /* 프린트 시 화면 전용 요소 숨김 */
+    @media print {
+        .no-print { display: none !important; }
+        .stApp { background: white !important; }
+        .block-container { max-width: 100% !important; padding: 0 !important; }
+        .report-header { box-shadow: none !important; border: 1px solid #ccc !important; }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -134,12 +182,14 @@ st.markdown("""
 # ==========================================
 # 🌟 session_state 초기화
 # ==========================================
-if "screen" not in st.session_state:
-    st.session_state["screen"] = "input"   # "input" | "report"
-if "prev_num_texts" not in st.session_state:
-    st.session_state["prev_num_texts"] = 1
-if "student_name" not in st.session_state:
-    st.session_state["student_name"] = ""
+defaults = {
+    "screen": "input",
+    "prev_num_texts": 1,
+    "student_name": "",
+}
+for k, v in defaults.items():
+    if k not in st.session_state:
+        st.session_state[k] = v
 
 # ==========================================
 # 🌟 데이터 및 분석 엔진 로드
@@ -229,7 +279,7 @@ def grade_summary_text(res):
     return " / ".join(parts)
 
 # ==========================================
-# 🌟 AI 평가 생성
+# 🌟 AI 평가 생성 (캐시: 동일 입력 재생성 방지)
 # ==========================================
 MAX_TEXT_LEN = 2500
 
@@ -257,8 +307,8 @@ def generate_ai_multi_evaluation(results_list, student_name=""):
 
 위 자료를 모두 종합하여, {name_label}의 글쓰기 역량 향상에 대한 구체적인 종합 평가문을 1000자 내외로 작성해 주세요.
 평가문 전체에 걸쳐 '{name_label}'을(를) 자연스럽게 호명하면서 작성해 주세요.
-반드시 다음 네 가지 관점을 균형 있게 담아 주세요.
 
+반드시 다음 네 가지 관점을 균형 있게 담아 주세요.
 1. [양적 성장] 글자 수, 명사·동사 사용량이 회차에 따라 어떻게 변화했는지, 그 변화가 갖는 의미
 2. [어휘 수준] 기초어휘 등급(1~5등급) 분포를 근거로 어휘 사용 수준이 어떻게 발전했는지
 3. [내용과 체계성] 각 글의 원문을 직접 읽고, 주제 표현, 생각의 깊이, 문단 구성, 글의 흐름을 구체적 문장을 예로 들어 평가
@@ -268,7 +318,7 @@ def generate_ai_multi_evaluation(results_list, student_name=""):
 - 따뜻하고 다정한 선생님의 말투로 작성
 - 수치보다 그 의미를 해석해서 서술
 - 잘한 점을 먼저 충분히 칭찬한 뒤, 개선점은 격려하는 방식으로 제안
-- 전체 분량은 800자 내외(700~900자)로 작성
+- 전체 분량은 1000자 내외(900~1100자)로 작성
 """
     try:
         client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
@@ -297,7 +347,6 @@ def generate_ai_individual_feedback(res, student_name=""):
 
 위 자료를 바탕으로, 이 글에 대한 선생님 총평을 1000자 내외로 작성해 주세요.
 반드시 다음 네 가지 관점을 담아 주세요.
-
 1. [양적 특징] 글자 수, 명사·동사 사용량이 보여주는 글의 특징
 2. [어휘 수준] 기초어휘 등급 분포를 근거로 학생의 어휘 사용 수준 평가
 3. [내용과 체계성] 원문을 직접 읽고 주제 표현, 생각의 깊이, 문단 구성, 글의 흐름을 구체적 문장을 예로 들어 평가
@@ -320,7 +369,6 @@ def generate_ai_individual_feedback(res, student_name=""):
 # 🌟 공통 UI 컴포넌트
 # ==========================================
 def show_vocab_section_header(idx):
-    """기초어휘 섹션 헤더 + 다운로드 버튼"""
     st.markdown("""
     <div style="background: linear-gradient(90deg, #FFFFFF 0%, #F2F6FC 100%); padding: 14px 20px;
                 border-left: 5px solid #2A3A63; border-radius: 10px; margin-top: 18px; margin-bottom: 12px;
@@ -354,6 +402,7 @@ def show_vocab_section_header(idx):
             st.caption("⚠️ 어휘 목록 파일을 찾을 수 없습니다.")
 
 def display_individual_results(res, title, container_type="info", idx=0):
+    """개별 글 분석 결과 표시. ai_feedback은 session_state에서 캐시."""
     if container_type == "info":
         st.info(f"### {title}")
     else:
@@ -383,10 +432,31 @@ def display_individual_results(res, title, container_type="info", idx=0):
                 st.write(format_word_dict(words_in_grade))
 
     st.write("---")
-    if st.button(f"🤖 {title} 기반 AI 맞춤형 총평 생성하기", key=f"ai_btn_{idx}"):
-        with st.spinner("선생님의 마음으로 글을 꼼꼼히 읽고 총평을 작성하고 있습니다..."):
-            ai_feedback = generate_ai_individual_feedback(res, st.session_state.get("student_name", ""))
-            st.success(f"**💌 선생님 총평:**\n\n{ai_feedback}")
+    # ✅ AI 총평 캐시 키: idx 기반
+    cache_key = f"ai_feedback_cache_{idx}"
+    already_generated = cache_key in st.session_state
+
+    if not already_generated:
+        st.markdown('<div class="pink-btn">', unsafe_allow_html=True)
+        if st.button(f"🤖 {title} AI 맞춤형 총평 생성하기", key=f"ai_btn_{idx}"):
+            with st.spinner("선생님의 마음으로 글을 꼼꼼히 읽고 총평을 작성하고 있습니다..."):
+                ai_feedback = generate_ai_individual_feedback(res, st.session_state.get("student_name", ""))
+                st.session_state[cache_key] = ai_feedback
+                st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+    
+    if already_generated:
+        ai_feedback = st.session_state[cache_key]
+        st.success(f"**💌 선생님 총평:**\n\n{ai_feedback}")
+        
+        # 개별 총평 프린트 버튼 (6번 요구사항)
+        student_name = st.session_state.get("student_name", "학생")
+        st.markdown('<div class="print-btn no-print">', unsafe_allow_html=True)
+        if st.button(f"🖨️ {title} 분석 결과 프린트", key=f"print_indiv_{idx}"):
+            st.markdown("""
+            <script>window.print();</script>
+            """, unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
 # ==========================================
 # 🌟 화면 1: 입력 화면
@@ -400,6 +470,7 @@ def show_input_screen():
 
     st.divider()
 
+    # ── 학생 이름 + 글 개수 나란히 ──
     name_col, count_col = st.columns([2, 1])
     with name_col:
         student_name = st.text_input(
@@ -422,11 +493,13 @@ def show_input_screen():
     # 개수가 바뀌면 결과 초기화
     if st.session_state["prev_num_texts"] != num_texts:
         for k in list(st.session_state.keys()):
-            if k.startswith("res_") or k in ("compare_results", "ai_multi_eval", "input_texts_saved"):
+            if k.startswith("res_") or k.startswith("ai_feedback_cache_") \
+               or k.startswith("title_") \
+               or k in ("compare_results", "ai_multi_eval", "report_input_hash"):
                 del st.session_state[k]
         st.session_state["prev_num_texts"] = num_texts
 
-    # 시계열 분석 버튼 (2편 이상일 때)
+    # 시계열 분석 버튼 (2편 이상)
     if num_texts >= 2:
         compare_btn = st.button("📈 시계열 글쓰기 역량 성장 리포트 분석하기", type="primary", use_container_width=True)
         st.info("⬇️ 아래 탭에 각각의 글을 입력한 후, 위 버튼을 누르면 성장 리포트 화면으로 이동합니다.")
@@ -437,9 +510,20 @@ def show_input_screen():
     # 탭 구성
     tabs = st.tabs([f"{i+1}번째 글" for i in range(num_texts)])
     input_texts = []
+    input_titles = []
 
     for i, tab in enumerate(tabs):
         with tab:
+            # 4번: 글 제목 입력
+            title_val = st.text_input(
+                f"{i+1}번째 글 제목",
+                value=st.session_state.get(f"title_{i}", ""),
+                placeholder=f"{i+1}번째 글의 제목을 입력하세요",
+                key=f"title_input_{i}",
+            )
+            st.session_state[f"title_{i}"] = title_val
+            input_titles.append(title_val)
+
             saved_text = st.session_state.get(f"text_saved_{i}", "")
             text_val = st.text_area(
                 f"{i+1}번째 글", height=300, key=f"text_{i}",
@@ -449,38 +533,77 @@ def show_input_screen():
             )
             input_texts.append(text_val)
 
-            if st.button(f"✨ {i+1}번째 글쓰기 분석 및 평가하기", key=f"btn_eval_{i}"):
-                if text_val.strip():
-                    with st.spinner("정밀 분석 중입니다..."):
-                        st.session_state[f"res_{i}"] = analyze_text(text_val)
-                        st.session_state[f"text_saved_{i}"] = text_val
-                else:
+            # 🩷 분홍색 분석 버튼 (7번 요구사항)
+            st.markdown('<div class="pink-btn">', unsafe_allow_html=True)
+            eval_clicked = st.button(f"✨ {i+1}번째 글쓰기 분석 및 평가하기", key=f"btn_eval_{i}")
+            st.markdown('</div>', unsafe_allow_html=True)
+
+            if eval_clicked:
+                # 6번: 학생 이름 필수 확인
+                if not student_name.strip():
+                    st.error("⚠️ 학생 이름을 먼저 입력해 주세요!")
+                elif not title_val.strip():
+                    # 4번: 제목 미입력 경고
+                    st.warning(f"⚠️ {i+1}번째 글의 제목을 입력해 주세요!")
+                elif not text_val.strip():
                     st.warning("분석할 텍스트를 먼저 입력해 주세요.")
+                else:
+                    # 8번: 이미 분석된 결과가 있으면 재분석 건너뜀
+                    prev = st.session_state.get(f"res_{i}")
+                    if prev and st.session_state.get(f"text_saved_{i}") == text_val:
+                        st.info("이미 분석된 결과가 있습니다. 내용이 변경된 경우에만 재분석됩니다.")
+                    else:
+                        with st.spinner("정밀 분석 중입니다..."):
+                            st.session_state[f"res_{i}"] = analyze_text(text_val)
+                            st.session_state[f"text_saved_{i}"] = text_val
+                            # 내용이 바뀌면 AI 캐시 삭제
+                            if f"ai_feedback_cache_{i}" in st.session_state:
+                                del st.session_state[f"ai_feedback_cache_{i}"]
 
             if f"res_{i}" in st.session_state:
                 st.divider()
                 c_type = "info" if i % 2 == 0 else "success"
-                display_individual_results(st.session_state[f"res_{i}"], f"📊 {i+1}번째", c_type, idx=i)
+                # 5번: 제목 포함한 라벨
+                saved_title = st.session_state.get(f"title_{i}", "")
+                label_title = f'"{saved_title}"' if saved_title.strip() else ""
+                display_label = f"📊 {i+1}번째 {label_title} 분석"
+                display_individual_results(st.session_state[f"res_{i}"], display_label, c_type, idx=i)
 
-    # 시계열 분석 버튼 처리 → 화면 전환
+    # 시계열 분석 버튼 처리
     if compare_btn:
-        # 현재 입력창 값을 session_state에서 읽기
-        current_texts = [st.session_state.get(f"text_{i}", "") for i in range(num_texts)]
-        # text_area value는 위에서 text_val로 읽었으므로 input_texts 사용
-        if all(t.strip() for t in input_texts):
-            with st.spinner("글을 비교 분석하고 AI 성장 리포트를 작성 중입니다..."):
-                results_list = [analyze_text(t) for t in input_texts]
-                st.session_state["compare_results"] = results_list
-                st.session_state["ai_multi_eval"] = generate_ai_multi_evaluation(results_list, student_name)
-                st.session_state["report_num_texts"] = num_texts
-                st.session_state["student_name"] = student_name
-                # 입력 텍스트 저장 (돌아왔을 때 복원용)
-                for i, t in enumerate(input_texts):
-                    st.session_state[f"text_saved_{i}"] = t
-            st.session_state["screen"] = "report"
-            st.rerun()
-        else:
+        # 6번: 학생 이름 필수
+        if not student_name.strip():
+            st.error("⚠️ 학생 이름을 먼저 입력해 주세요!")
+        elif not all(t.strip() for t in input_titles):
+            missing = [str(i+1) for i, t in enumerate(input_titles) if not t.strip()]
+            st.warning(f"⚠️ {', '.join(missing)}번째 글의 제목을 입력해 주세요!")
+        elif not all(t.strip() for t in input_texts):
             st.error("입력되지 않은 글이 있습니다. 모든 탭에 글을 채워주세요.")
+        else:
+            # 8번: 입력 해시로 재생성 방지
+            import hashlib
+            current_hash = hashlib.md5(
+                (student_name + "".join(input_texts) + "".join(input_titles)).encode()
+            ).hexdigest()
+
+            if st.session_state.get("report_input_hash") == current_hash and "compare_results" in st.session_state:
+                # 동일 입력 → 그냥 리포트 화면으로 이동
+                st.session_state["screen"] = "report"
+                st.rerun()
+            else:
+                with st.spinner("글을 비교 분석하고 AI 성장 리포트를 작성 중입니다..."):
+                    results_list = [analyze_text(t) for t in input_texts]
+                    ai_eval = generate_ai_multi_evaluation(results_list, student_name)
+                    st.session_state["compare_results"] = results_list
+                    st.session_state["ai_multi_eval"] = ai_eval
+                    st.session_state["report_num_texts"] = num_texts
+                    st.session_state["report_titles"] = input_titles
+                    st.session_state["student_name"] = student_name
+                    st.session_state["report_input_hash"] = current_hash
+                    for i, t in enumerate(input_texts):
+                        st.session_state[f"text_saved_{i}"] = t
+                st.session_state["screen"] = "report"
+                st.rerun()
 
 # ==========================================
 # 🌟 화면 2: 시계열 리포트 화면
@@ -489,10 +612,12 @@ def show_report_screen():
     results_list = st.session_state.get("compare_results", [])
     ai_eval = st.session_state.get("ai_multi_eval", "")
     num_texts = st.session_state.get("report_num_texts", len(results_list))
+    report_titles = st.session_state.get("report_titles", [""] * num_texts)
 
-    # ── 헤더 ──
     student_name = st.session_state.get("student_name", "")
     name_display = f"{student_name} 학생 · " if student_name.strip() else ""
+
+    # ── 헤더 ──
     st.markdown(f"""
     <div class="report-header">
         <h1>📈 시계열 글쓰기 역량 성장 리포트</h1>
@@ -500,16 +625,23 @@ def show_report_screen():
     </div>
     """, unsafe_allow_html=True)
 
-    # ── 뒤로가기 버튼 ──
-    st.markdown('<div class="back-btn">', unsafe_allow_html=True)
-    if st.button("← 입력 화면으로 돌아가기"):
-        st.session_state["screen"] = "input"
-        st.rerun()
-    st.markdown('</div>', unsafe_allow_html=True)
+    # ── 상단 버튼 행: 뒤로가기 + 프린트 ──
+    btn_col1, btn_col2, _ = st.columns([1.5, 1.5, 4])
+    with btn_col1:
+        st.markdown('<div class="pink-btn no-print">', unsafe_allow_html=True)
+        if st.button("← 입력 화면으로 돌아가기", key="back_top"):
+            st.session_state["screen"] = "input"
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+    with btn_col2:
+        st.markdown('<div class="print-btn no-print">', unsafe_allow_html=True)
+        if st.button("🖨️ 리포트 전체 프린트", key="print_report_top"):
+            st.markdown("<script>window.print();</script>", unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
     st.divider()
 
-    # ── 섹션 1: 꺾은선 그래프 + AI 총평 ──
+    # ── 섹션 1: 주요 지표 꺾은선 그래프 + 등급별 그래프 + AI 총평 ──
     st.subheader("📉 주요 글쓰기 지표 시계열 변화")
 
     trends = []
@@ -521,6 +653,7 @@ def show_report_screen():
         })
     chart_df = pd.DataFrame(trends, index=[f"{i+1}회차" for i in range(num_texts)])
 
+    # ── 1-1: 주요 지표 꺾은선 ──
     graph_col, eval_col = st.columns([1.1, 1])
     with graph_col:
         st.markdown("**회차별 지표 변동 꺾은선 그래프**")
@@ -535,26 +668,56 @@ def show_report_screen():
         </div>
         """, unsafe_allow_html=True)
 
+    st.write("")
+
+    # ── 1번: 기초어휘 등급별 어휘 개수 변화 그래프 ──
+    st.subheader("📊 기초어휘 등급별 어휘 개수 변화")
+    grade_trends = []
+    for res in results_list:
+        row = {}
+        for g in ["1등급", "2등급", "3등급", "4등급", "5등급", "등급 외"]:
+            row[g] = sum(res["grade_words"][g].values())
+        grade_trends.append(row)
+    grade_df = pd.DataFrame(grade_trends, index=[f"{i+1}회차" for i in range(num_texts)])
+    st.line_chart(grade_df)
+
     st.divider()
 
-    # ── 섹션 2: 회차별 상세 리포트 탭 ──
+    # ── 프린트 버튼 (섹션 아래) ──
+    st.markdown('<div class="print-btn no-print">', unsafe_allow_html=True)
+    if st.button("🖨️ 지표 그래프 + AI 총평 프린트", key="print_section1"):
+        st.markdown("<script>window.print();</script>", unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    st.divider()
+
+    # ── 섹션 2: 회차별 상세 탭 ──
     st.subheader("🔍 회차별 상세 분석")
-    result_tabs = st.tabs([f"{i+1}번째 글 상세" for i in range(num_texts)])
+    tab_labels = []
+    for i in range(num_texts):
+        t = report_titles[i] if i < len(report_titles) and report_titles[i].strip() else f"{i+1}번째"
+        tab_labels.append(f"{i+1}번째 상세")
+
+    result_tabs = st.tabs(tab_labels)
     for i, r_tab in enumerate(result_tabs):
         with r_tab:
-            display_individual_results(results_list[i], f"📝 {i+1}번째 제출", "success", idx=f"report_{i}")
+            saved_title = report_titles[i] if i < len(report_titles) else ""
+            label_title = f'"{saved_title}"' if saved_title.strip() else ""
+            # 5번: "N번째 '제목' 분석" 형태
+            display_label = f"📝 {i+1}번째 {label_title} 분석"
+            display_individual_results(results_list[i], display_label, "success", idx=f"report_{i}")
 
     st.divider()
 
     # ── 하단 뒤로가기 ──
-    st.markdown('<div class="back-btn">', unsafe_allow_html=True)
+    st.markdown('<div class="pink-btn no-print">', unsafe_allow_html=True)
     if st.button("← 입력 화면으로 돌아가기", key="back_bottom"):
         st.session_state["screen"] = "input"
         st.rerun()
     st.markdown('</div>', unsafe_allow_html=True)
 
 # ==========================================
-# 🌟 라우터: 화면 전환
+# 🌟 라우터
 # ==========================================
 if st.session_state["screen"] == "report" and "compare_results" in st.session_state:
     show_report_screen()
