@@ -448,14 +448,8 @@ def display_individual_results(res, title, container_type="info", idx=0):
         ai_feedback = st.session_state[cache_key]
         st.success(f"**💌 선생님 총평:**\n\n{ai_feedback}")
         
-        # 개별 총평 프린트 버튼 (6번 요구사항)
-        student_name = st.session_state.get("student_name", "학생")
-        st.markdown('<div class="print-btn no-print">', unsafe_allow_html=True)
-        if st.button(f"🖨️ {title} 분석 결과 프린트", key=f"print_indiv_{idx}"):
-            st.markdown("""
-            <script>window.print();</script>
-            """, unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+        # 프린트 안내
+        st.info("🖨️ 이 결과를 프린트하려면 브라우저에서 **Ctrl+P** (Mac: ⌘+P) 를 누르세요.")
 
 # ==========================================
 # 🌟 화면 1: 입력 화면
@@ -633,10 +627,7 @@ def show_report_screen():
             st.rerun()
         st.markdown('</div>', unsafe_allow_html=True)
     with btn_col2:
-        st.markdown('<div class="print-btn no-print">', unsafe_allow_html=True)
-        if st.button("🖨️ 리포트 전체 프린트", key="print_report_top"):
-            st.markdown("<script>window.print();</script>", unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+        st.info("🖨️ 프린트: **Ctrl+P** (Mac: ⌘+P)")
 
     st.divider()
 
@@ -656,13 +647,13 @@ def show_report_screen():
     graph_col, eval_col = st.columns([1.1, 1])
     with graph_col:
         st.markdown("**회차별 지표 변동 꺾은선 그래프**")
-        st.line_chart(chart_df)
+        st.line_chart(chart_df, height=490)
     with eval_col:
         st.markdown("**🤖 AI 맞춤형 종합 총평**")
         st.markdown(f"""
         <div style="background:#FFFBF0; border:1px solid #F0C040; border-left:5px solid #F0A000;
                     border-radius:12px; padding:20px 22px; font-size:15px; line-height:1.85;
-                    color:#2D2A00; max-height:420px; overflow-y:auto;">
+                    color:#2D2A00; max-height:490px; overflow-y:auto;">
             {ai_eval.replace(chr(10), '<br>')}
         </div>
         """, unsafe_allow_html=True)
@@ -678,15 +669,12 @@ def show_report_screen():
             row[g] = sum(res["grade_words"][g].values())
         grade_trends.append(row)
     grade_df = pd.DataFrame(grade_trends, index=[f"{i+1}회차" for i in range(num_texts)])
-    st.line_chart(grade_df)
+    st.line_chart(grade_df, height=490)
 
     st.divider()
 
-    # ── 프린트 버튼 (섹션 아래) ──
-    st.markdown('<div class="print-btn no-print">', unsafe_allow_html=True)
-    if st.button("🖨️ 지표 그래프 + AI 총평 프린트", key="print_section1"):
-        st.markdown("<script>window.print();</script>", unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+    # ── 프린트 안내 ──
+    st.info("🖨️ **프린트하려면 브라우저에서 Ctrl+P (Mac: ⌘+P) 를 누르세요.**")
 
     st.divider()
 
